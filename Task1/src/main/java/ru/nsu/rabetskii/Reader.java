@@ -3,12 +3,30 @@ package ru.nsu.rabetskii;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.*;
 
 public class Reader {
+    public HashMap<String, Integer> sortMap(HashMap<String,Integer> map) {
+        List<Map.Entry<String, Integer> > list =
+                new LinkedList<>(map.entrySet());
 
+        list.sort(new Comparator<Map.Entry<String, Integer>>() {
+            public int compare(Map.Entry<String, Integer> var1,
+                               Map.Entry<String, Integer> var2) {
+                return (var2.getValue()).compareTo(var1.getValue());
+            }
+        });
+
+        HashMap<String, Integer> newMap = new LinkedHashMap<String, Integer>();
+        for (Map.Entry<String, Integer> aa : list) {
+            newMap.put(aa.getKey(), aa.getValue());
+        }
+        return newMap;
+    }
+
+
+    public HashMap<String, Integer> ReadFile() {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
-    public void ReadFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader("file"))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -25,14 +43,7 @@ public class Reader {
         catch (IOException e) {
             e.printStackTrace();
         }
+        HashMap<String, Integer> newMap = sortMap(map);
+        return newMap;
     }
-
-    public void WriteFile() {
-        for (String name : map.keySet())
-        {
-            System.out.println(name + " " + map.get(name).toString());
-        }
-    }
-
-
 }
