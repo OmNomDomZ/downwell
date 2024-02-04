@@ -1,6 +1,5 @@
 package ru.nsu.rabetskii;
 
-
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -12,6 +11,5 @@ public class Main {
 
         Writer writer = new Writer();
         writer.CSVWriter(map, NumOfWords);
-
     }
 }

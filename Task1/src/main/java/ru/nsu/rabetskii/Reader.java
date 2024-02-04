@@ -1,6 +1,5 @@
 package ru.nsu.rabetskii;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -52,7 +51,6 @@ public class Reader {
             e.printStackTrace();
         }
 
-        HashMap<String, Integer> newMap = sortMap(map);
-        return newMap;
+        return sortMap(map);
     }
 }
