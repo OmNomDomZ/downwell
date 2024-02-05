@@ -12,8 +12,8 @@ public class Writer {
         return new DecimalFormat("#0.000").format(freq);
     }
 
-    public void CSVWriter(final HashMap<String, Integer> map, final Integer NumOfWords) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("file.csv"))) {
+    public void CSVWriter(final HashMap<String, Integer> map, final Integer NumOfWords, String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName + ".csv"))) {
             writer.write("Слово,Частота,Частота (в %)");
             writer.newLine();
 

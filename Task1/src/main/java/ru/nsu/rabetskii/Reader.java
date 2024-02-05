@@ -8,6 +8,10 @@ public class Reader {
     private final HashMap<String, Integer> map = new HashMap<String, Integer>();
     private Integer numOfWords = 0;
 
+    public final Integer getNumOfWords() {
+        return numOfWords;
+    }
+
     private HashMap<String, Integer> sortMap(HashMap<String,Integer> map) {
         List<Map.Entry<String, Integer> > list =
                 new LinkedList<>(map.entrySet());
@@ -26,12 +30,8 @@ public class Reader {
         return newMap;
     }
 
-    public final Integer getNumOfWords() {
-        return numOfWords;
-    }
-
-    public HashMap<String, Integer> ReadFile() {
-        try (Scanner reader = new Scanner(new FileReader("file"))) {
+    public HashMap<String, Integer> ReadFile(String fileName) {
+        try (Scanner reader = new Scanner(new FileReader(fileName))) {
             String line;
             while (reader.hasNext()) {
                 line = reader.nextLine();
