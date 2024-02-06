@@ -1,11 +1,12 @@
 package ru.nsu.rabetskii;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class Reader {
-    private final HashMap<String, Integer> map = new HashMap<String, Integer>();
+    private final HashMap<String, Integer> map = new HashMap<>();
     private Integer numOfWords = 0;
 
     public final Integer getNumOfWords() {
@@ -13,24 +14,24 @@ public class Reader {
     }
 
     private HashMap<String, Integer> sortMap(HashMap<String,Integer> map) {
-        List<Map.Entry<String, Integer> > list =
+        List<Map.Entry<String, Integer>> list =
                 new LinkedList<>(map.entrySet());
 
-        list.sort(new Comparator<Map.Entry<String, Integer>>() {
+        list.sort(new Comparator<>() {
             public int compare(Map.Entry<String, Integer> var1,
                                Map.Entry<String, Integer> var2) {
                 return (var2.getValue()).compareTo(var1.getValue());
             }
         });
 
-        HashMap<String, Integer> newMap = new LinkedHashMap<String, Integer>();
+        HashMap<String, Integer> newMap = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> sortedVar : list) {
             newMap.put(sortedVar.getKey(), sortedVar.getValue());
         }
         return newMap;
     }
 
-    public HashMap<String, Integer> ReadFile(String fileName) {
+    public HashMap<String, Integer> ReadFile(String fileName) throws IOException {
         try (Scanner reader = new Scanner(new FileReader(fileName))) {
             String line;
             while (reader.hasNext()) {
@@ -47,10 +48,6 @@ public class Reader {
                 }
             }
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
         return sortMap(map);
     }
 }

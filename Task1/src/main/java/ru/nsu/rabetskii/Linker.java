@@ -2,15 +2,29 @@ package ru.nsu.rabetskii;
 
 import java.util.HashMap;
 
+
 public class Linker {
+    private HashMap<String, Integer> map = new HashMap<>();
+    private Integer numOfWords = 0;
+
     public void LinkerCall(String name) {
-        Reader reader = new Reader();
-        HashMap<String, Integer> map = reader.ReadFile(name);
-        final Integer NumOfWords = reader.getNumOfWords();
+        try{
+            Reader reader = new Reader();
+            map = reader.ReadFile(name);
+            numOfWords = reader.getNumOfWords();
+        }
+        catch (Exception e){
+            System.err.println("Произошла ошибка при чтении файла: " + e.getMessage());
+            return;
+        }
 
-        Writer writer = new Writer();
-        writer.CSVWriter(map, NumOfWords, name);
+        try{
+            Writer writer = new Writer();
+            writer.CSVWriter(map, numOfWords, name);
+        }
+        catch (Exception e){
+            System.err.println("Произошла ошибка при записи файла: " + e.getMessage());
+        }
+
     }
-
-
 }
