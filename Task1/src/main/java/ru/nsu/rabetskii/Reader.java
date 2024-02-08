@@ -1,7 +1,7 @@
 package ru.nsu.rabetskii;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 public class Reader {
@@ -30,7 +30,7 @@ public class Reader {
         return newMap;
     }
 
-    public HashMap<String, Integer> ReadFile(String fileName) throws IOException {
+    public HashMap<String, Integer> ReadFile(String fileName) throws FileNotFoundException {
         try (Scanner reader = new Scanner(new FileReader(fileName))) {
             String line;
             while (reader.hasNext()) {
