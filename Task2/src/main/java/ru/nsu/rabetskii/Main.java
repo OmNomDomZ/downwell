@@ -16,6 +16,4 @@ public class Main {
 //            String str = reader.readLine();
 //        }
     }
-//        Factory factory = new Factory();
-//        factory.factory();
 }

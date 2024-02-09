@@ -2,10 +2,7 @@ package ru.nsu.rabetskii.commands;
 
 import ru.nsu.rabetskii.ExecutionContext;
 
-public class CommandPlus extends CommandFactory {
-    public void defineCommand() {
-        System.out.println("Plus");
-    }
+public class CommandPlus extends Command {
     public void runCommand(ExecutionContext context, String[] str){
         Double var1 = context.Pop();
         Double var2 = context.Pop();

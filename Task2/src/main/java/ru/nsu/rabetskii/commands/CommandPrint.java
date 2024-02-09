@@ -2,11 +2,8 @@ package ru.nsu.rabetskii.commands;
 
 import ru.nsu.rabetskii.ExecutionContext;
 
-public class CommandPrint extends CommandFactory {
-    public void defineCommand() {
-        System.out.println("Print");
-    }
+public class CommandPrint extends Command {
     public void runCommand(ExecutionContext context, String[] str){
-        context.Print();
+        System.out.println(context.Print());
     }
 }

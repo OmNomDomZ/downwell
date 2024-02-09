@@ -1,4 +1,17 @@
 DEFINE a 4
 PUSH a
+DEFINE aaa 10
 SQRT
+PUSH aaa
+POP aaa
+PUSH aaa
++
+PUSH 4
++
+SQRT
+PUSH 2
+/
+PUSH 10
+-
+# hello
 PRINT

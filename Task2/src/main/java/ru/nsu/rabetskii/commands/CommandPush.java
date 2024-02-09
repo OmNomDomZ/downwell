@@ -2,10 +2,7 @@ package ru.nsu.rabetskii.commands;
 
 import ru.nsu.rabetskii.ExecutionContext;
 
-public class CommandPush extends CommandFactory {
-    public void defineCommand() {
-        System.out.println("Plus");
-    }
+public class CommandPush extends Command {
     public void runCommand(ExecutionContext context, String[] str){
         if (str[1].chars().allMatch( Character::isDigit)){
             context.Push(Double.parseDouble(str[1]));

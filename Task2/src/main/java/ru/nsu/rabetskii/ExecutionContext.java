@@ -26,8 +26,8 @@ public class ExecutionContext {
         namedParams.put(name, var);
     }
 
-    public void Print(){
-        System.out.println(stack.peek());
+    public Double Print(){
+        return stack.peek();
     }
 
     public Double GetDefinedValue(String name){
