@@ -6,7 +6,7 @@ public class Main {
         {
             for (String name : args) {
                 Linker linker = new Linker();
-                linker.LinkerCall(name);
+                linker.linkerCall(name);
             }
         }
         else

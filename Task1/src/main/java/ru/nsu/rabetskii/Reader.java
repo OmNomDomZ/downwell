@@ -2,17 +2,18 @@ package ru.nsu.rabetskii;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Reader {
-    private final HashMap<String, Integer> map = new HashMap<>();
+    private final Map<String, Integer> map = new HashMap<>();
     private Integer numOfWords = 0;
 
     public final Integer getNumOfWords() {
         return numOfWords;
     }
 
-    private HashMap<String, Integer> sortMap(HashMap<String,Integer> map) {
+    private Map<String, Integer> sortMap(Map<String,Integer> map) {
         List<Map.Entry<String, Integer>> list =
                 new LinkedList<>(map.entrySet());
 
@@ -23,14 +24,14 @@ public class Reader {
             }
         });
 
-        HashMap<String, Integer> newMap = new LinkedHashMap<>();
+        Map<String, Integer> newMap = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> sortedVar : list) {
             newMap.put(sortedVar.getKey(), sortedVar.getValue());
         }
         return newMap;
     }
 
-    public HashMap<String, Integer> ReadFile(String fileName) throws FileNotFoundException {
+    public Map<String, Integer> readFile(String fileName) throws IOException {
         try (Scanner reader = new Scanner(new FileReader(fileName))) {
             String line;
             while (reader.hasNext()) {
