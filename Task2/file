@@ -1,6 +1,5 @@
-PUSH 0
-PUSH 0
-/
-# kjghsf
-фыа
+DEFINE a 12
+PUSH a
+PUSH 1
++
 PRINT

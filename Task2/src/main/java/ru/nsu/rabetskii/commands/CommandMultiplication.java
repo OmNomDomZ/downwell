@@ -2,10 +2,12 @@ package ru.nsu.rabetskii.commands;
 
 import ru.nsu.rabetskii.ExecutionContext;
 
+import java.util.List;
+
 public class CommandMultiplication extends Command {
-    public void runCommand(ExecutionContext context, String[] str){
-        Double var1 = context.Pop();
-        Double var2 = context.Pop();
-        context.Push(var1 * var2);
+    public void runCommand(ExecutionContext context, List<String> arguments){
+        Double var1 = context.pop();
+        Double var2 = context.pop();
+        context.push(var1 * var2);
     }
 }

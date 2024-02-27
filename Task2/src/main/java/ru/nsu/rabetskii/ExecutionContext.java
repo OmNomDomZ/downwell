@@ -12,25 +12,25 @@ public class ExecutionContext {
         stack = new Stack<>();
     }
 
-    public void Push(Double var){
+    public void push(Double var){
         stack.push(var);
     }
 
-    public Double Pop(){
+    public Double pop(){
         Double value = stack.peek();
         stack.pop();
         return value;
     }
 
-    public void Define(String name, Double var){
+    public void define(String name, Double var){
         namedParams.put(name, var);
     }
 
-    public Double Print(){
+    public Double print(){
         return stack.peek();
     }
 
-    public Double GetDefinedValue(String name){
+    public Double getDefinedValue(String name){
         return namedParams.get(name);
     }
 }
