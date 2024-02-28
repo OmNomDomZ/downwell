@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Scanner;
 import java.io.FileReader;
 
-import ru.nsu.rabetskii.commands.*;
-
 public class ReadFile {
     private Calculator calculator = new Calculator();
     private final ExecutionContext context = new ExecutionContext();
-    public void FileReader(String fileName) {
+    public void fileReader(String fileName) throws FileNotFoundException {
         try(Scanner scanner = new Scanner(new FileReader(fileName))){
             while(scanner.hasNext()){
                 String line = scanner.nextLine();
@@ -21,7 +19,7 @@ public class ReadFile {
                 calculator.calculate(context, arguments);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileNotFoundException(fileName);
         }
     }
 }

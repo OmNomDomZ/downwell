@@ -30,6 +30,10 @@ public class ExecutionContext {
         return stack.peek();
     }
 
+    public boolean contain(String name){
+        return namedParams.containsKey(name);
+    }
+
     public Double getDefinedValue(String name){
         return namedParams.get(name);
     }

@@ -1,27 +1,26 @@
 package ru.nsu.rabetskii;
 
 import ru.nsu.rabetskii.commands.Command;
-import ru.nsu.rabetskii.exceptions.CommandCreationException;
-import ru.nsu.rabetskii.exceptions.IncorrectNumOfArguments;
-import ru.nsu.rabetskii.exceptions.UnknownCommandException;
+import ru.nsu.rabetskii.exceptions.*;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Calculator {
     private final CommandFactory factory = new CommandFactory();
-    private Command curCommand;
+
     public void calculate(ExecutionContext context, List<String> arguments) {
+        Command curCommand;
         try {
             curCommand = factory.createCommand(arguments.getFirst());
-        } catch (UnknownCommandException | CommandCreationException e){
+        } catch (UnknownCommandException | CommandCreationException | FileNotFoundException e){
             System.out.println("Произошла ошибка! " + e.getMessage());
             return;
         }
 
         try {
             curCommand.runCommand(context, arguments);
-        } catch (IncorrectNumOfArguments e){
+        } catch (IncorrectNumOfArgsException | IncorrectVarNameException | MyEmptyStackException |
+                    NonExisteVariableException | StrIsNotDoubleException | InsufficientArgumentsException e){
             System.out.println("Произошла ошибка! " + e.getMessage());
         }
     }
