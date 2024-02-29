@@ -9,7 +9,7 @@ import java.io.FileReader;
 public class ReadFile {
     private Calculator calculator = new Calculator();
     private final ExecutionContext context = new ExecutionContext();
-    public void fileReader(String fileName) throws FileNotFoundException {
+    public void fileReader(String fileName) {
         try(Scanner scanner = new Scanner(new FileReader(fileName))){
             while(scanner.hasNext()){
                 String line = scanner.nextLine();
@@ -18,8 +18,8 @@ public class ReadFile {
 
                 calculator.calculate(context, arguments);
             }
-        } catch (IOException e) {
-            throw new FileNotFoundException(fileName);
+        } catch (RuntimeException | FileNotFoundException e) {
+            System.out.println("Произошла ошибка! " + e.getMessage());
         }
     }
 }

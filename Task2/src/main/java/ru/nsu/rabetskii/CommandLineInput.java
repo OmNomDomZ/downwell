@@ -16,7 +16,11 @@ public class CommandLineInput {
                 List<String> arguments = List.of(wordArray);
 
                 if (!inputString.equalsIgnoreCase("finish")) {
-                    calculator.calculate(context, arguments);
+                    try {
+                        calculator.calculate(context, arguments);
+                    } catch (RuntimeException e){
+                        System.out.println("Произошла ошибка! " + e.getMessage());
+                    }
                 } else {
                     exit = true;
                     return;
