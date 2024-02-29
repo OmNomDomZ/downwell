@@ -2,6 +2,7 @@ package ru.nsu.rabetskii.commandsTests;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import ru.nsu.rabetskii.Calculator;
 import ru.nsu.rabetskii.CommandFactory;
 import ru.nsu.rabetskii.DefaultCommandFactory;

@@ -6,7 +6,7 @@ import ru.nsu.rabetskii.exceptions.*;
 import java.util.HashMap;
 import java.util.Map;
 public class CacheCommandFactory implements CommandFactory {
-    private Command command;
+
     private CommandFactory factory;
     private Map<String, Command> map = new HashMap<String, Command>();
 
@@ -19,7 +19,7 @@ public class CacheCommandFactory implements CommandFactory {
             return map.get(commandName);
         }
         else{
-            command = factory.createCommand(commandName);
+            Command command = factory.createCommand(commandName);
             map.put(commandName, command);
             return command;
         }

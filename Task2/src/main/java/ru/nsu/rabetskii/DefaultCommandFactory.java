@@ -29,7 +29,7 @@ public class DefaultCommandFactory implements CommandFactory {
         try (FileReader fileReader = new FileReader(CONFIG_FILE)) {
             properties.load(fileReader);
         } catch (IOException e){
-            throw new FileNotFoundException(CONFIG_FILE);
+            throw new MyFileNotFoundException(CONFIG_FILE);
         }
     }
 

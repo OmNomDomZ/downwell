@@ -12,21 +12,21 @@ public class ExecutionContext {
         stack = new Stack<>();
     }
 
-    public void push(Double var){
+    public void push(double var){
         stack.push(var);
     }
 
-    public Double pop(){
-        Double value = stack.peek();
+    public double pop(){
+        double value = stack.peek();
         stack.pop();
         return value;
     }
 
-    public void define(String name, Double var){
+    public void define(String name, double var){
         namedParams.put(name, var);
     }
 
-    public Double print(){
+    public double print(){
         return stack.peek();
     }
 
@@ -34,7 +34,7 @@ public class ExecutionContext {
         return namedParams.containsKey(name);
     }
 
-    public Double getDefinedValue(String name){
+    public double getDefinedValue(String name){
         return namedParams.get(name);
     }
 }

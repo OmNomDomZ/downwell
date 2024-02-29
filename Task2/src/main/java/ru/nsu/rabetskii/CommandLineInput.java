@@ -1,7 +1,5 @@
 package ru.nsu.rabetskii;
 
-import ru.nsu.rabetskii.exceptions.CommandCreationException;
-
 import java.util.List;
 import java.util.Scanner;
 
