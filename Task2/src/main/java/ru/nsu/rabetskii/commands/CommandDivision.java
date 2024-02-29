@@ -6,7 +6,7 @@ import ru.nsu.rabetskii.exceptions.*;
 import java.util.EmptyStackException;
 import java.util.List;
 
-public class CommandDivision extends Command {
+public class CommandDivision implements Command {
     public void runCommand(ExecutionContext context, List<String> args){
         if (args.size() == 1){
             try {

@@ -4,6 +4,6 @@ import ru.nsu.rabetskii.ExecutionContext;
 
 import java.util.List;
 
-public abstract class Command {
-    public abstract void runCommand(ExecutionContext context, List<String> args);
+public interface Command {
+    void runCommand(ExecutionContext context, List<String> args);
 }

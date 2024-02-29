@@ -8,7 +8,7 @@ import ru.nsu.rabetskii.exceptions.NonExisteVariableException;
 import java.util.EmptyStackException;
 import java.util.List;
 
-public class CommandPush extends Command {
+public class CommandPush implements Command {
     private boolean isStingDouble(String str){
         try {
             Double.parseDouble(str);

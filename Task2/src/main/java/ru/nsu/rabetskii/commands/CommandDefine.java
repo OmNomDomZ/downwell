@@ -7,7 +7,7 @@ import ru.nsu.rabetskii.exceptions.StrIsNotDoubleException;
 
 import java.util.List;
 
-public class CommandDefine extends Command {
+public class CommandDefine implements Command {
     private boolean isStingDouble(String str){
         try {
             Double.parseDouble(str);

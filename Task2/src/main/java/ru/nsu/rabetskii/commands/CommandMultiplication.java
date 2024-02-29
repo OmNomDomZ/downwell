@@ -8,7 +8,7 @@ import ru.nsu.rabetskii.exceptions.IncorrectNumOfArgsException;
 import java.util.EmptyStackException;
 import java.util.List;
 
-public class CommandMultiplication extends Command {
+public class CommandMultiplication implements Command {
     public void runCommand(ExecutionContext context, List<String> args){
         if (args.size() == 1){
             try {

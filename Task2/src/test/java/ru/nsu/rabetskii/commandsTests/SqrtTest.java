@@ -3,19 +3,24 @@ package ru.nsu.rabetskii.commandsTests;
 import org.junit.Assert;
 import org.junit.Test;
 import ru.nsu.rabetskii.Calculator;
+import ru.nsu.rabetskii.CommandFactory;
+import ru.nsu.rabetskii.DefaultCommandFactory;
 import ru.nsu.rabetskii.ExecutionContext;
 
 import java.util.List;
 
 public class SqrtTest {
+    private final CommandFactory factory = new DefaultCommandFactory();
     @Test
     public void sqrtTest(){
         ExecutionContext context = new ExecutionContext();
         List<String> args = List.of("SQRT");
         context.push(16.0);
 
+        factory.createCommand(args.getFirst());
+
         Calculator calculator = new Calculator();
-        calculator.calculate(context, args);
+        calculator.calculate(context, args, factory);
 
         double result = context.pop();
 
@@ -28,9 +33,11 @@ public class SqrtTest {
         Calculator calculator = new Calculator();
         List<String> args = List.of("SQRT", "a");
 
+        factory.createCommand(args.getFirst());
+
         String error = "no error";
         try {
-            calculator.calculate(context, args);
+            calculator.calculate(context, args, factory);
         } catch (RuntimeException e) {
             error = e.getMessage();
         }
@@ -44,9 +51,11 @@ public class SqrtTest {
         Calculator calculator = new Calculator();
         List<String> args = List.of("SQRT");
 
+        factory.createCommand(args.getFirst());
+
         String error = "no error";
         try {
-            calculator.calculate(context, args);
+            calculator.calculate(context, args, factory);
         } catch (RuntimeException e) {
             error = e.getMessage();
         }

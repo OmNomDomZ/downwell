@@ -2,10 +2,12 @@ package ru.nsu.rabetskii.commandsTests;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import ru.nsu.rabetskii.Calculator;
+import ru.nsu.rabetskii.CommandFactory;
+import ru.nsu.rabetskii.DefaultCommandFactory;
 import ru.nsu.rabetskii.ExecutionContext;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class DefineTest {
@@ -15,7 +17,10 @@ public class DefineTest {
         Calculator calculator = new Calculator();
         List<String> args = List.of("DEFINE", "a", "1");
 
-        calculator.calculate(context, args);
+        CommandFactory factory = new DefaultCommandFactory();
+        factory.createCommand(args.getFirst());
+
+        calculator.calculate(context, args, factory);
         double definedValue = context.getDefinedValue("a");
         Assert.assertEquals(1.0, definedValue, 0);
     }
@@ -26,9 +31,12 @@ public class DefineTest {
         Calculator calculator = new Calculator();
         List<String> args = List.of("DEFINE", "a");
 
+        CommandFactory factory = new DefaultCommandFactory();
+        factory.createCommand(args.getFirst());
+
         String error = "no error";
         try {
-            calculator.calculate(context, args);
+            calculator.calculate(context, args, factory);
         } catch (RuntimeException e) {
             error = e.getMessage();
         }
@@ -42,9 +50,12 @@ public class DefineTest {
         Calculator calculator = new Calculator();
         List<String> args = List.of("DEFINE", "1", "1");
 
+        CommandFactory factory = new DefaultCommandFactory();
+        factory.createCommand(args.getFirst());
+
         String error = "no error";
         try {
-            calculator.calculate(context, args);
+            calculator.calculate(context, args, factory);
         } catch (RuntimeException e) {
             error = e.getMessage();
         }
@@ -58,9 +69,12 @@ public class DefineTest {
         Calculator calculator = new Calculator();
         List<String> args = List.of("DEFINE", "a", "a");
 
+        CommandFactory factory = new DefaultCommandFactory();
+        factory.createCommand(args.getFirst());
+
         String error = "no error";
         try {
-            calculator.calculate(context, args);
+            calculator.calculate(context, args, factory);
         } catch (RuntimeException e) {
             error = e.getMessage();
         }

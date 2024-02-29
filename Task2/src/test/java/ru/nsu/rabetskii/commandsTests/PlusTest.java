@@ -3,10 +3,13 @@ package ru.nsu.rabetskii.commandsTests;
 import org.junit.Assert;
 import org.junit.Test;
 import ru.nsu.rabetskii.Calculator;
+import ru.nsu.rabetskii.CommandFactory;
+import ru.nsu.rabetskii.DefaultCommandFactory;
 import ru.nsu.rabetskii.ExecutionContext;
 
 import java.util.List;
 public class PlusTest {
+    private final CommandFactory factory = new DefaultCommandFactory();
     @Test
     public void plusTest(){
         ExecutionContext context = new ExecutionContext();
@@ -14,8 +17,10 @@ public class PlusTest {
         context.push(2.0);
         context.push(3.0);
 
+        factory.createCommand(args.getFirst());
+
         Calculator calculator = new Calculator();
-        calculator.calculate(context, args);
+        calculator.calculate(context, args, factory);
 
         double sum = context.pop();
 
@@ -28,9 +33,11 @@ public class PlusTest {
         Calculator calculator = new Calculator();
         List<String> args = List.of("+", "a");
 
+        factory.createCommand(args.getFirst());
+
         String error = "no error";
         try {
-            calculator.calculate(context, args);
+            calculator.calculate(context, args, factory);
         } catch (RuntimeException e) {
             error = e.getMessage();
         }
@@ -45,9 +52,11 @@ public class PlusTest {
         List<String> args = List.of("+");
         context.push(2.5);
 
+        factory.createCommand(args.getFirst());
+
         String error = "no error";
         try {
-            calculator.calculate(context, args);
+            calculator.calculate(context, args, factory);
         } catch (RuntimeException e) {
             error = e.getMessage();
         }

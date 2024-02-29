@@ -8,7 +8,7 @@ import ru.nsu.rabetskii.exceptions.MyEmptyStackException;
 import java.util.EmptyStackException;
 import java.util.List;
 
-public class CommandSQRT extends Command {
+public class CommandSQRT implements Command {
     public void runCommand(ExecutionContext context, List<String> args){
         if (args.size() == 1){
             try {

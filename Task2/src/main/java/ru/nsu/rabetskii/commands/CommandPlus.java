@@ -8,7 +8,7 @@ import ru.nsu.rabetskii.exceptions.IncorrectNumOfArgsException;
 import java.util.EmptyStackException;
 import java.util.List;
 
-public class CommandPlus extends Command {
+public class CommandPlus implements Command {
     public void runCommand(ExecutionContext context, List<String> args){
         if (args.size() == 1){
             try {

@@ -7,7 +7,7 @@ import ru.nsu.rabetskii.exceptions.IncorrectNumOfArgsException;
 import java.util.EmptyStackException;
 import java.util.List;
 
-public class CommandPop extends Command {
+public class CommandPop implements Command {
     public void runCommand(ExecutionContext context, List<String> args){
         if (args.size() == 1){
             try {

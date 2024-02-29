@@ -3,10 +3,13 @@ package ru.nsu.rabetskii.commandsTests;
 import org.junit.Assert;
 import org.junit.Test;
 import ru.nsu.rabetskii.Calculator;
+import ru.nsu.rabetskii.CommandFactory;
+import ru.nsu.rabetskii.DefaultCommandFactory;
 import ru.nsu.rabetskii.ExecutionContext;
 
 import java.util.List;
 public class DivisionTest {
+    private final CommandFactory factory = new DefaultCommandFactory();
     @Test
     public void divisionTest(){
         ExecutionContext context = new ExecutionContext();
@@ -15,7 +18,10 @@ public class DivisionTest {
         context.push(10.0);
 
         Calculator calculator = new Calculator();
-        calculator.calculate(context, args);
+
+        factory.createCommand(args.getFirst());
+
+        calculator.calculate(context, args, factory);
 
         double quotient = context.pop();
 
@@ -28,9 +34,11 @@ public class DivisionTest {
         Calculator calculator = new Calculator();
         List<String> args = List.of("/", "a");
 
+        factory.createCommand(args.getFirst());
+
         String error = "no error";
         try {
-            calculator.calculate(context, args);
+            calculator.calculate(context, args, factory);
         } catch (RuntimeException e) {
             error = e.getMessage();
         }
@@ -45,9 +53,11 @@ public class DivisionTest {
         List<String> args = List.of("/");
         context.push(2.5);
 
+        factory.createCommand(args.getFirst());
+
         String error = "no error";
         try {
-            calculator.calculate(context, args);
+            calculator.calculate(context, args, factory);
         } catch (RuntimeException e) {
             error = e.getMessage();
         }
