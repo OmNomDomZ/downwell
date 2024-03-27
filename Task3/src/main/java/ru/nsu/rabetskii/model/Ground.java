@@ -8,4 +8,19 @@ public class Ground extends MyObject {
         this.width = width;
         this.height = height;
     }
+
+    @Override
+    public void updateGameState() {
+
+    }
+
+    @Override
+    public void setOnGround(boolean status) {
+
+    }
+
+    @Override
+    public boolean getOnGround() {
+        return false;
+    }
 }
