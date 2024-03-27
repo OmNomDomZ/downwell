@@ -26,6 +26,11 @@ public class Enemy extends MyObject{
     }
 
     @Override
+    public void getDamage() {
+        hp--;
+    }
+
+    @Override
     public void setOnGround(boolean status) {
 
     }

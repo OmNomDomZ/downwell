@@ -2,18 +2,21 @@ package ru.nsu.rabetskii.model;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Model implements AutoCloseable{
     private List<GameObject> bullets;
     private GameObject player;
     private GameObject ground;
-    private GameObject enemy;
+    private List<GameObject> enemies;
     private ModelListener listener;
     private Thread ticker;
     public Model(){
         ground = new Ground(10, 400, 500, 50);
-        enemy = new Enemy(new Point(10, 375), ground);
+        enemies = new ArrayList<>();
+        GameObject enemy = new Enemy(new Point(10, 375), ground);
+        enemies.add(enemy);
         bullets = new ArrayList<>();
         player = new Player(bullets);
         ticker = new Ticker(this);
@@ -35,14 +38,54 @@ public class Model implements AutoCloseable{
     private void updateGameState(){
         player.setOnGround(ground.collidesWith(player));
         player.updateGameState();
-        enemy.updateGameState();
+        updateEnemyGameState();
         updateBulletGameState();
+        checkCollision();
+
+    }
+
+    private void checkCollision() {
+        checkPlayerEnemyCollision();
+        checkBulletEnemyCollision();
+        checkBulletGroundCollision();
+    }
+
+
+    private void checkPlayerEnemyCollision(){
+        for (GameObject enemy : enemies){
+            if (player.collidesWith(enemy)){
+                player.getDamage();
+            }
+        }
+    }
+
+    private void checkBulletEnemyCollision(){
+        Iterator<GameObject> bulletIterator = bullets.iterator();
+        while (bulletIterator.hasNext()) {
+            GameObject bullet = bulletIterator.next();
+            for (GameObject enemy : enemies) {
+                if (bullet instanceof MachineGun && bullet.collidesWith(enemy)) {
+                    enemies.remove(enemy);
+                    bulletIterator.remove();
+                    break;
+                }
+            }
+        }
+    }
+
+    private void checkBulletGroundCollision(){
 
     }
 
     private void updateBulletGameState(){
         for (GameObject bullet : bullets){
             bullet.updateGameState();
+        }
+    }
+
+    private void updateEnemyGameState(){
+        for (GameObject enemy : enemies){
+            enemy.updateGameState();
         }
     }
 
@@ -58,8 +101,8 @@ public class Model implements AutoCloseable{
         return ground;
     }
 
-    public GameObject getEnemy() {
-        return enemy;
+    public List<GameObject> getEnemies() {
+        return enemies;
     }
 
     public void setListener(ModelListener listener) {
@@ -69,6 +112,8 @@ public class Model implements AutoCloseable{
     @Override
     public void close() throws InterruptedException {
         ticker.interrupt();
-        ticker.join();
+        if (ticker.isAlive()) {
+            ticker.join();
+        }
     }
 }

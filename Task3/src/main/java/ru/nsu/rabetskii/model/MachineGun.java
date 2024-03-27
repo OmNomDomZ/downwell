@@ -11,7 +11,12 @@ public class MachineGun extends MyObject{
     }
 
     public void updateGameState(){
-        point.x += speed;
+        point.y += speed;
+    }
+
+    @Override
+    public void getDamage() {
+
     }
 
     @Override

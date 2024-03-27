@@ -15,6 +15,11 @@ public class Ground extends MyObject {
     }
 
     @Override
+    public void getDamage() {
+
+    }
+
+    @Override
     public void setOnGround(boolean status) {
 
     }

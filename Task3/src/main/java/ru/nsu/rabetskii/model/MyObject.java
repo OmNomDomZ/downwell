@@ -1,6 +1,5 @@
 package ru.nsu.rabetskii.model;
 
-import javax.sound.sampled.Line;
 import java.awt.*;
 
 public abstract class MyObject implements GameObject {
@@ -27,11 +26,8 @@ public abstract class MyObject implements GameObject {
         return this.height;
     }
 
-    public void getDamage(){
-        hp--;
-        if (hp == 0){
-            
-        }
+    public int getHp(){
+        return hp;
     }
 
     public boolean collidesWith(GameObject object) {
