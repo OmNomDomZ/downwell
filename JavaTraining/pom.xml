@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.nsu.rabetskii.lab7</groupId>
-    <artifactId>Producer-Consumer</artifactId>
+    <artifactId>JavaTraining</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

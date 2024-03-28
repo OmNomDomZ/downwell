@@ -1,4 +1,4 @@
-package ru.nsu.rabetskii.lab7;
+package ru.nsu.rabetskii.Topic7;
 
 import java.util.LinkedList;
 import java.util.List;

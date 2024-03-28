@@ -1,4 +1,4 @@
-    package ru.nsu.rabetskii.lab7;
+    package ru.nsu.rabetskii.Topic7;
 
     public class Consumer implements Runnable{
         private Storage<String> storage;
