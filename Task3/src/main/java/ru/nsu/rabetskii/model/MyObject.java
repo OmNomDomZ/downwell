@@ -1,22 +1,24 @@
 package ru.nsu.rabetskii.model;
 
-import java.awt.*;
-
 public abstract class MyObject implements GameObject {
     protected int hp;
     protected int speed;
-    protected Point point;
+    protected int x;
+    protected int y;
     protected int width;
     protected int height;
 
-
-    public Point getPoint() {
-        return point;
+    public int getX() {
+        return x;
     }
-    public void setPoint(Point point) {this.point = point;}
-
-    public Rectangle getBounds() {
-        return new Rectangle(point.x, point.y, width, height);
+    public int getY() {
+        return y;
+    }
+    public void setX(int x) {
+        this.x = x;
+    }
+    public void setY(int y) {
+        this.y = y;
     }
 
     public int getWidth(){
@@ -32,8 +34,19 @@ public abstract class MyObject implements GameObject {
     }
 
     public boolean collidesWith(GameObject object) {
-        Rectangle object1Bounds = object.getBounds();
-        Rectangle object2Bounds = this.getBounds();
-        return object2Bounds.intersects(object1Bounds);
+        int x1 = this.getX();
+        int y1 = this.getY();
+        int width1 = this.getWidth();
+        int height1 = this.getHeight();
+
+        int x2 = object.getX();
+        int y2 = object.getY();
+        int width2 = object.getWidth();
+        int height2 = object.getHeight();
+
+        return x1 < x2 + width2 &&
+                x1 + width1 > x2 &&
+                y1 < y2 + height2 &&
+                y1 + height1 > y2;
     }
 }

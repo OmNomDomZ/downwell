@@ -1,10 +1,9 @@
 package ru.nsu.rabetskii.model;
 
-import java.awt.*;
-
 public class MachineGun extends MyObject{
-    public MachineGun(Point point, int speed){
-        this.point = point;
+    public MachineGun(int x, int y, int speed){
+        this.x = x;
+        this.y =y;
         this.speed = speed;
         this.width = 5;
         this.height = 5;
@@ -12,7 +11,7 @@ public class MachineGun extends MyObject{
     }
 
     public void updateGameState(){
-        point.y += speed;
+        y += speed;
         hp--;
     }
 

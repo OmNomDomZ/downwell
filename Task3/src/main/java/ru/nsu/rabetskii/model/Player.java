@@ -1,7 +1,5 @@
 package ru.nsu.rabetskii.model;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.List;
 
 public class Player extends MyObject{
@@ -18,7 +16,8 @@ public class Player extends MyObject{
     private int currentNumBullets;
 
     public Player(List<GameObject> bullets){
-        point = new Point(10, 10);
+        x = 10;
+        y = 10;
         width = 30;
         height = 30;
         hp = 4;
@@ -30,43 +29,24 @@ public class Player extends MyObject{
         currentNumBullets = maxNumBullets;
     }
 
-    public void handleKeyDown(int keyCode){
-        if (keyCode == KeyEvent.VK_LEFT){
-            keyLeftPressed = true;
-        } else if (keyCode == KeyEvent.VK_RIGHT){
-            keyRightPressed = true;
-        } else if (keyCode == KeyEvent.VK_SPACE){
-            keySpacePressed = true;
-        }
-    }
-
     public void shoot(){
         if (!playerOnGround && currentNumBullets != 0) {
-            MachineGun bullet = new MachineGun(new Point(point.x + width / 2, point.y), 10);
+            MachineGun bullet = new MachineGun(x + width / 2, y, 10);
             bullets.add(bullet);
             currentNumBullets--;
         }
     }
 
-    public void handleKeyUp(int keyCode){
-        if (keyCode == KeyEvent.VK_LEFT){
-            keyLeftPressed = false;
-        } else if (keyCode == KeyEvent.VK_RIGHT){
-            keyRightPressed = false;
-        } else if (keyCode == KeyEvent.VK_SPACE){
-            keySpacePressed = false;
-        }
-    }
 
     public void updateGameState() {
         if (keyLeftPressed){
-            point = new Point( point.x - speed, point.y);
+            x -= speed;
         } else if (keyRightPressed){
-            point = new Point( point.x + speed, point.y);
+            x += speed;
         }
         if (keySpacePressed){
             if (playerOnGround){
-                point = new Point(point.x, point.y - JUMP_HEIGHT);
+                y -= JUMP_HEIGHT;
             } else
                 if (currentNumBullets != 0){
                 shoot();
@@ -78,7 +58,7 @@ public class Player extends MyObject{
             fallSpeed = 0;
             currentNumBullets = maxNumBullets;
         } else{
-            point = new Point((int) point.getX(), (int) (point.getY() + fallSpeed));
+            y += (int) fallSpeed;
             fallSpeed = fallSpeed < 10 ? fallSpeed + GRAVITY : fallSpeed;
         }
 
@@ -92,7 +72,8 @@ public class Player extends MyObject{
         if (hp == 0){
 
         } else {
-            point = new Point(10, 10);
+            x = 10;
+            y = 10;
         }
     }
 
@@ -102,5 +83,17 @@ public class Player extends MyObject{
 
     public  boolean getOnGround(){
         return playerOnGround;
+    }
+
+    public void setKeyLeftPressed(boolean keyLeftPressed) {
+        this.keyLeftPressed = keyLeftPressed;
+    }
+
+    public void setKeyRightPressed(boolean keyRightPressed) {
+        this.keyRightPressed = keyRightPressed;
+    }
+
+    public void setKeySpacePressed(boolean keySpacePressed) {
+        this.keySpacePressed = keySpacePressed;
     }
 }

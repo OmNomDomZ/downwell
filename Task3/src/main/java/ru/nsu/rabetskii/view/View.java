@@ -32,7 +32,7 @@ public class View extends JFrame implements ModelListener {
         playerLabel = new JLabel();
         ImageIcon playerIcon = new ImageIcon(getClass().getResource("/defaultPlayer.png"));
         playerLabel.setIcon(playerIcon);
-        playerLabel.setBounds(model.getPlayer().getPoint().x, model.getPlayer().getPoint().y,
+        playerLabel.setBounds(model.getPlayer().getX(), model.getPlayer().getY(),
                                 model.getPlayer().getWidth(), model.getPlayer().getHeight());
 
 
@@ -40,7 +40,7 @@ public class View extends JFrame implements ModelListener {
         for (int i = 0; i < model.getGround().getWidth(); i += groundIcon.getIconWidth()){
             JLabel tempLabel = new JLabel();
             tempLabel.setIcon(groundIcon);
-            tempLabel.setBounds(model.getGround().getPoint().x + i, model.getGround().getPoint().y,
+            tempLabel.setBounds(model.getGround().getX() + i, model.getGround().getY(),
                                     groundIcon.getIconWidth(), model.getGround().getHeight());
             mainLabel.add(tempLabel);
         }
@@ -59,12 +59,12 @@ public class View extends JFrame implements ModelListener {
     public void onModelChanged() {
         SwingUtilities.invokeLater(() -> {
 
-            playerLabel.setBounds(model.getPlayer().getPoint().x, model.getPlayer().getPoint().y,
+            playerLabel.setBounds(model.getPlayer().getX(), model.getPlayer().getY(),
                     model.getPlayer().getWidth(), model.getPlayer().getHeight());
 
             // движение mainLabel
             if (!model.getPlayer().getOnGround()) {
-                if (model.getPlayer().getPoint().y > screenSize.height / 2) {
+                if (model.getPlayer().getY() > screenSize.height / 2) {
                         mainLabel.setBounds(startX, startY -= 2, screenSize.width, screenSize.height);
                 }
             }
@@ -89,7 +89,7 @@ public class View extends JFrame implements ModelListener {
                 bulletLabel.setName("bullet"); // Устанавливаем имя метки, чтобы потом можно было их идентифицировать
                 bulletLabel.setOpaque(true);
                 bulletLabel.setBackground(Color.RED);
-                bulletLabel.setBounds(bullet.getPoint().x, bullet.getPoint().y, bullet.getWidth(), bullet.getHeight());
+                bulletLabel.setBounds(bullet.getX(), bullet.getY(), bullet.getWidth(), bullet.getHeight());
                 mainLabel.add(bulletLabel);
             }
 
@@ -99,7 +99,7 @@ public class View extends JFrame implements ModelListener {
                 enemyLabel.setName("enemy");
                 ImageIcon enemyIcon = new ImageIcon(getClass().getResource("/enemy.png"));
                 enemyLabel.setIcon(enemyIcon);
-                enemyLabel.setBounds(enemy.getPoint().x, enemy.getPoint().y, enemy.getWidth(), enemy.getHeight());
+                enemyLabel.setBounds(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
                 mainLabel.add(enemyLabel);
             }
                  repaint();

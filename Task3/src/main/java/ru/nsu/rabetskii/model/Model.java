@@ -1,6 +1,5 @@
 package ru.nsu.rabetskii.model;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +14,7 @@ public class Model implements AutoCloseable{
     public Model(){
         ground = new Ground(10, 400, 500, 50);
         enemies = new ArrayList<>();
-        GameObject enemy = new Enemy(new Point(10, 375), ground);
+        GameObject enemy = new Enemy(10, 375, ground);
         enemies.add(enemy);
         bullets = new ArrayList<>();
         player = new Player(bullets);
@@ -36,7 +35,6 @@ public class Model implements AutoCloseable{
     }
 
     private void updateGameState(){
-        player.setOnGround(ground.collidesWith(player));
         player.updateGameState();
         checkCollision();
         updateEnemyGameState();
@@ -53,8 +51,8 @@ public class Model implements AutoCloseable{
 
     private void checkPlayerGroundCollision() {
         if (ground.collidesWith(player)) {
-            int playerY = ground.getPoint().y - player.getHeight();
-            player.setPoint(new Point(player.getPoint().x, playerY + 1));
+            int playerY = ground.getY() - player.getHeight();
+            player.setY(playerY + 1);
             player.setOnGround(true);
         } else {
             player.setOnGround(false);
@@ -123,8 +121,6 @@ public class Model implements AutoCloseable{
     @Override
     public void close() throws InterruptedException {
         ticker.interrupt();
-//        if (ticker.isAlive()) {
-            ticker.join();
-//        }
+        ticker.join();
     }
 }

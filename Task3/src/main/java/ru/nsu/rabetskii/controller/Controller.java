@@ -2,7 +2,6 @@ package ru.nsu.rabetskii.controller;
 
 import ru.nsu.rabetskii.model.Model;
 import ru.nsu.rabetskii.model.Player;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -18,19 +17,35 @@ public class Controller implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        if (model.getPlayer() instanceof Player){
-            Player player = (Player) model.getPlayer();
-            player.handleKeyDown(keyCode);
+        if (model.getPlayer() instanceof Player player){
+            switch (e.getKeyCode()){
+                case KeyEvent.VK_LEFT:
+                    player.setKeyLeftPressed(true);
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    player.setKeyRightPressed(true);
+                    break;
+                case KeyEvent.VK_SPACE:
+                    player.setKeySpacePressed(true);
+                    break;
+            }
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        if (model.getPlayer() instanceof Player) {
-            Player player = (Player) model.getPlayer();
-            player.handleKeyUp(keyCode);
+        if (model.getPlayer() instanceof Player player){
+            switch (e.getKeyCode()){
+                case KeyEvent.VK_LEFT:
+                    player.setKeyLeftPressed(false);
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    player.setKeyRightPressed(false);
+                    break;
+                case KeyEvent.VK_SPACE:
+                    player.setKeySpacePressed(false);
+                    break;
+            }
         }
     }
 }

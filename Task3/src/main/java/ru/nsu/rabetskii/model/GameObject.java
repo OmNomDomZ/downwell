@@ -1,11 +1,10 @@
 package ru.nsu.rabetskii.model;
 
-import java.awt.*;
-
 public interface GameObject {
-    Point getPoint();
-    void setPoint(Point point);
-    Rectangle getBounds();
+    int getX();
+    int getY();
+    void setX(int x);
+    void setY(int y);
     void updateGameState();
     void getDamage();
     boolean collidesWith(GameObject object);
