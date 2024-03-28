@@ -38,16 +38,27 @@ public class Model implements AutoCloseable{
     private void updateGameState(){
         player.setOnGround(ground.collidesWith(player));
         player.updateGameState();
+        checkCollision();
         updateEnemyGameState();
         updateBulletGameState();
-        checkCollision();
 
     }
 
     private void checkCollision() {
+        checkPlayerGroundCollision();
         checkPlayerEnemyCollision();
         checkBulletEnemyCollision();
         checkBulletGroundCollision();
+    }
+
+    private void checkPlayerGroundCollision() {
+        if (ground.collidesWith(player)) {
+            int playerY = ground.getPoint().y - player.getHeight();
+            player.setPoint(new Point(player.getPoint().x, playerY + 1));
+            player.setOnGround(true);
+        } else {
+            player.setOnGround(false);
+        }
     }
 
 
@@ -112,8 +123,8 @@ public class Model implements AutoCloseable{
     @Override
     public void close() throws InterruptedException {
         ticker.interrupt();
-        if (ticker.isAlive()) {
+//        if (ticker.isAlive()) {
             ticker.join();
-        }
+//        }
     }
 }

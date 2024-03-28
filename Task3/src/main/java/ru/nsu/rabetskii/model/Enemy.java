@@ -1,6 +1,6 @@
 package ru.nsu.rabetskii.model;
 
-import java.awt.*;
+import java.awt.Point;
 
 public class Enemy extends MyObject{
     private boolean enemyOnGround = true;

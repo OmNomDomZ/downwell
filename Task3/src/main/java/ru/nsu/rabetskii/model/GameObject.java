@@ -4,6 +4,7 @@ import java.awt.*;
 
 public interface GameObject {
     Point getPoint();
+    void setPoint(Point point);
     Rectangle getBounds();
     void updateGameState();
     void getDamage();

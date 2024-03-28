@@ -13,6 +13,7 @@ public abstract class MyObject implements GameObject {
     public Point getPoint() {
         return point;
     }
+    public void setPoint(Point point) {this.point = point;}
 
     public Rectangle getBounds() {
         return new Rectangle(point.x, point.y, width, height);

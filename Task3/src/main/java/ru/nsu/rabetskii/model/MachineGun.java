@@ -8,10 +8,12 @@ public class MachineGun extends MyObject{
         this.speed = speed;
         this.width = 5;
         this.height = 5;
+        hp = 100;
     }
 
     public void updateGameState(){
         point.y += speed;
+        hp--;
     }
 
     @Override

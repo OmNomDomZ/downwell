@@ -25,8 +25,7 @@ public class View extends JFrame implements ModelListener {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(screenSize.width, screenSize.height);
-//        setSize(500, 500);
-        getContentPane().setBackground(Color.gray);
+        getContentPane().setBackground(Color.darkGray);
         setLayout(null);
         setResizable(false);
 
@@ -59,14 +58,19 @@ public class View extends JFrame implements ModelListener {
     @Override
     public void onModelChanged() {
         SwingUtilities.invokeLater(() -> {
+
             playerLabel.setBounds(model.getPlayer().getPoint().x, model.getPlayer().getPoint().y,
                     model.getPlayer().getWidth(), model.getPlayer().getHeight());
 
-//            if (!model.getPlayer().getOnGround()){
-//                mainLabel.setBounds(startX, startY--, screenSize.width, screenSize.height);
-//            } else{
-                mainLabel.setBounds(startX, startY, screenSize.width, screenSize.height);
-//            }
+            // движение mainLabel
+            if (!model.getPlayer().getOnGround()) {
+                if (model.getPlayer().getPoint().y > screenSize.height / 2) {
+                        mainLabel.setBounds(startX, startY -= 2, screenSize.width, screenSize.height);
+                }
+            }
+            mainLabel.setBounds(startX, startY, screenSize.width, screenSize.height);
+
+
 
             // Удаление всех старых меток пуль
             Component[] components = mainLabel.getComponents();

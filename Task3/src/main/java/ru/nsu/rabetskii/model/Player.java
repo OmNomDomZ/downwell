@@ -7,31 +7,27 @@ import java.util.List;
 public class Player extends MyObject{
     private final double GRAVITY = 0.5;
     private final double FALL_SPEED = 0.0;
-    private final int JUMP_HEIGHT = 300;
+    private final int JUMP_HEIGHT = 50;
     private double fallSpeed;
     private boolean keyLeftPressed;
     private boolean keyRightPressed;
     private boolean keySpacePressed;
     private boolean playerOnGround;
     private List<GameObject> bullets;
-    private boolean gameOver;
-    private boolean jumpAbility;
-    private boolean shootAbility;
-    private int maxNumBullets;
+    private final int maxNumBullets;
+    private int currentNumBullets;
 
     public Player(List<GameObject> bullets){
         point = new Point(10, 10);
-        width = 25;
-        height = 25;
+        width = 30;
+        height = 30;
         hp = 4;
         speed = 10;
         fallSpeed = FALL_SPEED;
         playerOnGround = false;
         this.bullets = bullets;
-        gameOver = false;
-        jumpAbility = false;
-        shootAbility = true;
-        maxNumBullets = 3;
+        maxNumBullets = 6;
+        currentNumBullets = maxNumBullets;
     }
 
     public void handleKeyDown(int keyCode){
@@ -45,15 +41,10 @@ public class Player extends MyObject{
     }
 
     public void shoot(){
-        if (bullets.size() < maxNumBullets){
+        if (!playerOnGround && currentNumBullets != 0) {
             MachineGun bullet = new MachineGun(new Point(point.x + width / 2, point.y), 10);
             bullets.add(bullet);
-        } else if(bullets.size() == maxNumBullets && shootAbility){
-            bullets.removeFirst();
-            MachineGun bullet = new MachineGun(new Point(point.x + width / 2, point.y), 10);
-            bullets.add(bullet);
-        } else {
-            shootAbility = false;
+            currentNumBullets--;
         }
     }
 
@@ -76,7 +67,8 @@ public class Player extends MyObject{
         if (keySpacePressed){
             if (playerOnGround){
                 point = new Point(point.x, point.y - JUMP_HEIGHT);
-            } else {
+            } else
+                if (currentNumBullets != 0){
                 shoot();
                 keySpacePressed = false;
             }
@@ -84,19 +76,21 @@ public class Player extends MyObject{
 
         if (playerOnGround){
             fallSpeed = 0;
-            shootAbility = true;
-            jumpAbility = true;
+            currentNumBullets = maxNumBullets;
         } else{
             point = new Point((int) point.getX(), (int) (point.getY() + fallSpeed));
             fallSpeed = fallSpeed < 10 ? fallSpeed + GRAVITY : fallSpeed;
         }
+
+        // удаляем пулю из списка
+        bullets.removeIf(bullet -> bullet.getHp() == 0);
     }
 
     @Override
     public void getDamage() {
         hp--;
         if (hp == 0){
-            gameOver = true;
+
         } else {
             point = new Point(10, 10);
         }
