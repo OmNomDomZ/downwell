@@ -19,16 +19,4 @@ public class MachineGun extends MyObject{
     public void getDamage() {
 
     }
-
-    @Override
-    public void setOnGround(boolean status) {
-
-    }
-
-    @Override
-    public boolean getOnGround() {
-        return false;
-    }
-
-
 }

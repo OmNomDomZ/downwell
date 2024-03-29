@@ -1,26 +1,56 @@
 package ru.nsu.rabetskii.model;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class Model implements AutoCloseable{
-    private List<GameObject> bullets;
     private GameObject player;
-    private GameObject ground;
+    private List<GameObject> bullets;
+    private List<GameObject> land;
     private List<GameObject> enemies;
     private ModelListener listener;
     private Thread ticker;
     public Model(){
-        ground = new Ground(10, 400, 500, 50);
+        land = new ArrayList<>();
         enemies = new ArrayList<>();
-        GameObject enemy = new Enemy(10, 375, ground);
-        enemies.add(enemy);
         bullets = new ArrayList<>();
         player = new Player(bullets);
+
+        loadLevel("/level.txt");
+
         ticker = new Ticker(this);
         ticker.start();
         generate();
+    }
+
+    private void loadLevel(String filename){
+        try (InputStream inputStream = getClass().getResourceAsStream(filename);
+             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))){
+            String line;
+            while ((line = bufferedReader.readLine()) != null){
+                String[] args = line.split(" ");
+
+                String objectType = args[0];
+                int x = Integer.parseInt(args[1]);
+                int y = Integer.parseInt(args[2]);
+
+                switch (objectType){
+                    case "GROUND":
+                        land.add(new Ground(x, y, Integer.parseInt(args[3]), Integer.parseInt(args[4])));
+                        break;
+                    case "ENEMY":
+                        enemies.add(new Enemy(x, y));
+                        break;
+                    }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void generate() {
@@ -47,15 +77,34 @@ public class Model implements AutoCloseable{
         checkPlayerEnemyCollision();
         checkBulletEnemyCollision();
         checkBulletGroundCollision();
+        checkEnemyGroundCollision();
+    }
+
+    private void checkEnemyGroundCollision(){
+        Iterator<GameObject> enemyIterator = enemies.iterator();
+        while (enemyIterator.hasNext()) {
+            GameObject enemy = enemyIterator.next();
+            for (GameObject ground : land) {
+                if (enemy.getX() + enemy.getSpeed() >= ground.getWidth() - ground.getX() ||
+                        enemy.getX() + enemy.getSpeed() <= ground.getX()) {
+                    enemy.setSpeed(enemy.getSpeed() * -1);
+                    enemy.setOnGround(true);
+                    break;
+                }
+            }
+        }
     }
 
     private void checkPlayerGroundCollision() {
-        if (ground.collidesWith(player)) {
-            int playerY = ground.getY() - player.getHeight();
-            player.setY(playerY + 1);
-            player.setOnGround(true);
-        } else {
-            player.setOnGround(false);
+        for (GameObject ground : land){
+            if (ground.collidesWith(player)) {
+                int playerY = ground.getY() - player.getHeight();
+                player.setY(playerY + 1);
+                player.setOnGround(true);
+                break;
+            } else {
+                player.setOnGround(false);
+            }
         }
     }
 
@@ -106,8 +155,8 @@ public class Model implements AutoCloseable{
         return bullets;
     }
 
-    public GameObject getGround() {
-        return ground;
+    public List<GameObject> getGround() {
+        return land;
     }
 
     public List<GameObject> getEnemies() {

@@ -18,13 +18,4 @@ public class Ground extends MyObject {
 
     }
 
-    @Override
-    public void setOnGround(boolean status) {
-
-    }
-
-    @Override
-    public boolean getOnGround() {
-        return false;
-    }
 }

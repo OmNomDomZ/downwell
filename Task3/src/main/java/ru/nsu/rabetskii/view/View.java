@@ -37,12 +37,14 @@ public class View extends JFrame implements ModelListener {
 
 
         ImageIcon groundIcon = new ImageIcon(getClass().getResource("/ground.png"));
-        for (int i = 0; i < model.getGround().getWidth(); i += groundIcon.getIconWidth()){
-            JLabel tempLabel = new JLabel();
-            tempLabel.setIcon(groundIcon);
-            tempLabel.setBounds(model.getGround().getX() + i, model.getGround().getY(),
-                                    groundIcon.getIconWidth(), model.getGround().getHeight());
-            mainLabel.add(tempLabel);
+        for (GameObject ground : model.getGround()){
+            for (int i = 0; i < ground.getWidth(); i += groundIcon.getIconWidth()){
+                JLabel tempLabel = new JLabel();
+                tempLabel.setIcon(groundIcon);
+                tempLabel.setBounds(ground.getX() + i, ground.getY(),
+                        groundIcon.getIconWidth(), ground.getHeight());
+                mainLabel.add(tempLabel);
+            }
         }
 
         mainLabel.add(playerLabel);
@@ -63,12 +65,13 @@ public class View extends JFrame implements ModelListener {
                     model.getPlayer().getWidth(), model.getPlayer().getHeight());
 
             // движение mainLabel
-            if (!model.getPlayer().getOnGround()) {
-                if (model.getPlayer().getY() > screenSize.height / 2) {
-                        mainLabel.setBounds(startX, startY -= 2, screenSize.width, screenSize.height);
+//            if (!model.getPlayer().getOnGround()) {
+                if (model.getPlayer().getY() > (screenSize.height - startY) / 2) {
+                        mainLabel.setBounds(startX, startY -= 2, screenSize.width, screenSize.height * 3);
+                } else {
+                    mainLabel.setBounds(startX, startY, screenSize.width, screenSize.height * 3);
                 }
-            }
-            mainLabel.setBounds(startX, startY, screenSize.width, screenSize.height);
+//            }
 
 
 

@@ -7,6 +7,7 @@ public abstract class MyObject implements GameObject {
     protected int y;
     protected int width;
     protected int height;
+    protected boolean objectOnGround;
 
     public int getX() {
         return x;
@@ -27,6 +28,19 @@ public abstract class MyObject implements GameObject {
 
     public int getHeight(){
         return this.height;
+    }
+    public int getSpeed(){
+        return speed;
+    }
+    public void setSpeed(int speed){
+        this.speed = speed;
+    }
+    public void setOnGround(boolean status) {
+        this.objectOnGround = status;
+    }
+
+    public  boolean getOnGround(){
+        return objectOnGround;
     }
 
     public int getHp(){

@@ -12,5 +12,7 @@ public interface GameObject {
     int getHeight();
     void setOnGround(boolean status);
     boolean getOnGround();
+    int getSpeed();
+    void setSpeed(int speed);
     int getHp();
 }

@@ -10,7 +10,6 @@ public class Player extends MyObject{
     private boolean keyLeftPressed;
     private boolean keyRightPressed;
     private boolean keySpacePressed;
-    private boolean playerOnGround;
     private List<GameObject> bullets;
     private final int maxNumBullets;
     private int currentNumBullets;
@@ -23,14 +22,14 @@ public class Player extends MyObject{
         hp = 4;
         speed = 10;
         fallSpeed = FALL_SPEED;
-        playerOnGround = false;
+        objectOnGround = false;
         this.bullets = bullets;
         maxNumBullets = 6;
         currentNumBullets = maxNumBullets;
     }
 
     public void shoot(){
-        if (!playerOnGround && currentNumBullets != 0) {
+        if (!objectOnGround && currentNumBullets != 0) {
             MachineGun bullet = new MachineGun(x + width / 2, y, 10);
             bullets.add(bullet);
             currentNumBullets--;
@@ -45,16 +44,15 @@ public class Player extends MyObject{
             x += speed;
         }
         if (keySpacePressed){
-            if (playerOnGround){
+            if (objectOnGround){
                 y -= JUMP_HEIGHT;
             } else
                 if (currentNumBullets != 0){
                 shoot();
-                keySpacePressed = false;
             }
         }
 
-        if (playerOnGround){
+        if (objectOnGround){
             fallSpeed = 0;
             currentNumBullets = maxNumBullets;
         } else{
@@ -75,14 +73,6 @@ public class Player extends MyObject{
             x = 10;
             y = 10;
         }
-    }
-
-    public void setOnGround(boolean status) {
-        this.playerOnGround = status;
-    }
-
-    public  boolean getOnGround(){
-        return playerOnGround;
     }
 
     public void setKeyLeftPressed(boolean keyLeftPressed) {
