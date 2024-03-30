@@ -11,15 +11,22 @@ import java.util.List;
 public class Model implements AutoCloseable{
     private GameObject player;
     private List<GameObject> bullets;
-    private List<GameObject> land;
     private List<GameObject> enemies;
+    private List<GameObject> land;
+    private List<GameObject> walls;
     private ModelListener listener;
     private Thread ticker;
+    private enum GameObjectType {
+        GROUND,
+        WALL,
+        ENEMY
+    }
     public Model(){
         land = new ArrayList<>();
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
         player = new Player(bullets);
+        walls = new ArrayList<>();
 
         loadLevel("/level.txt");
 
@@ -35,15 +42,18 @@ public class Model implements AutoCloseable{
             while ((line = bufferedReader.readLine()) != null){
                 String[] args = line.split(" ");
 
-                String objectType = args[0];
+                GameObjectType objectType = GameObjectType.valueOf(args[0]);
                 int x = Integer.parseInt(args[1]);
                 int y = Integer.parseInt(args[2]);
 
                 switch (objectType){
-                    case "GROUND":
+                    case GROUND:
                         land.add(new Ground(x, y, Integer.parseInt(args[3]), Integer.parseInt(args[4])));
                         break;
-                    case "ENEMY":
+                    case WALL:
+                        walls.add(new Wall(x, y, Integer.parseInt(args[3]), Integer.parseInt(args[4])));
+                        break;
+                    case ENEMY:
                         enemies.add(new Enemy(x, y));
                         break;
                     }
@@ -81,16 +91,31 @@ public class Model implements AutoCloseable{
     }
 
     private void checkEnemyGroundCollision(){
-        Iterator<GameObject> enemyIterator = enemies.iterator();
-        while (enemyIterator.hasNext()) {
-            GameObject enemy = enemyIterator.next();
+        for (GameObject enemy : enemies) {
+            boolean onGround = false;
+            boolean crashed = false;
             for (GameObject ground : land) {
-                if (enemy.getX() + enemy.getSpeed() >= ground.getWidth() - ground.getX() ||
-                        enemy.getX() + enemy.getSpeed() <= ground.getX()) {
-                    enemy.setSpeed(enemy.getSpeed() * -1);
-                    enemy.setOnGround(true);
+                if (enemy.collidesWith(ground) &&
+                        enemy.getX() + enemy.getSpeed() > ground.getX() &&
+                        enemy.getX() + enemy.getSpeed() + enemy.getWidth() < ground.getX() + ground.getWidth() &&
+                        enemy.getY() + enemy.getHeight() >= ground.getY()) {
+                    onGround = true;
+                    for (GameObject otherGround : land) {
+                        if (ground != otherGround &&
+                                enemy.collidesWith(otherGround) &&
+                                enemy.getX() + enemy.getSpeed() < otherGround.getX() + otherGround.getWidth() &&
+                                enemy.getX() + enemy.getWidth() + enemy.getSpeed() > otherGround.getX()){
+                            crashed = true;
+                            break;
+                        }
+                    }
                     break;
                 }
+
+            }
+
+            if (!onGround || crashed) {
+                enemy.setSpeed(enemy.getSpeed() * -1);
             }
         }
     }
@@ -113,6 +138,7 @@ public class Model implements AutoCloseable{
         for (GameObject enemy : enemies){
             if (player.collidesWith(enemy)){
                 player.getDamage();
+                break;
             }
         }
     }
@@ -162,6 +188,7 @@ public class Model implements AutoCloseable{
     public List<GameObject> getEnemies() {
         return enemies;
     }
+    public List<GameObject> getWalls() {return walls;}
 
     public void setListener(ModelListener listener) {
         this.listener = listener;

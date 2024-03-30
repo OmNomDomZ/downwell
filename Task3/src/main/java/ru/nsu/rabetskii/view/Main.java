@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Model model = new Model();
         SwingUtilities.invokeLater(() -> {
-            View mainWindow = new View(model);
+            GameView mainWindow = new GameView(model);
             mainWindow.setVisible(true);
         });
     }

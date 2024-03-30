@@ -21,11 +21,9 @@ public abstract class MyObject implements GameObject {
     public void setY(int y) {
         this.y = y;
     }
-
     public int getWidth(){
         return this.width;
     }
-
     public int getHeight(){
         return this.height;
     }
