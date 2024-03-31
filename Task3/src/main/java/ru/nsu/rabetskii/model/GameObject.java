@@ -10,9 +10,13 @@ public interface GameObject {
     boolean collidesWith(GameObject object);
     int getWidth();
     int getHeight();
-    void setOnGround(boolean status);
-    boolean getOnGround();
+    void setOnPlatform(boolean status);
+    boolean getOnPlatform();
     int getSpeed();
     void setSpeed(int speed);
     int getHp();
+    boolean getMovingLeft();
+    boolean getMovingRight();
+    void setMovingLeft(boolean movingLeft);
+    void setMovingRight(boolean movingRight);
 }

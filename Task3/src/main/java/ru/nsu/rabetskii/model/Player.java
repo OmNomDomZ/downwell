@@ -4,11 +4,9 @@ import java.util.List;
 
 public class Player extends MyObject{
     private final double GRAVITY = 0.5;
-    private final double MAX_FALL_SPEED = 8.0;
+    private final double MAX_FALL_SPEED = 9.0;
     private final int JUMP_HEIGHT = 50;
     private double fallSpeed;
-    private boolean keyLeftPressed;
-    private boolean keyRightPressed;
     private boolean keySpacePressed;
     private List<GameObject> bullets;
     private final int maxNumBullets;
@@ -45,9 +43,9 @@ public class Player extends MyObject{
     }
 
     public void updateGameState() {
-        if (keyLeftPressed){
+        if (movingLeft){
             x -= speed;
-        } else if (keyRightPressed){
+        } else if (movingRight){
             x += speed;
         }
 
@@ -69,17 +67,8 @@ public class Player extends MyObject{
         if (hp == 0){
             System.out.println("Game Over");
         } else {
-            x = 770;
-            y = 10;
+            y -= 150;
         }
-    }
-
-    public void setKeyLeftPressed(boolean keyLeftPressed) {
-        this.keyLeftPressed = keyLeftPressed;
-    }
-
-    public void setKeyRightPressed(boolean keyRightPressed) {
-        this.keyRightPressed = keyRightPressed;
     }
 
     public void setKeySpacePressed(boolean keySpacePressed) {

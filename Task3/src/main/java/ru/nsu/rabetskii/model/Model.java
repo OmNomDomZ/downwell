@@ -9,29 +9,36 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Model implements AutoCloseable{
-    private GameObject player;
-    private List<GameObject> bullets;
-    private List<GameObject> enemies;
-    private List<GameObject> land;
-    private List<GameObject> walls;
+    private final GameObject player;
+    private final List<GameObject> bullets;
+    private final List<GameObject> enemies;
+    private final List<GameObject> platforms;
+    private final List<GameObject> walls;
+    private final List<GameObject> breakablePlatform;
     private ModelListener listener;
-    private Thread ticker;
+    private final Thread ticker;
+    private int score;
     private enum GameObjectType {
-        GROUND,
+        BREAKABLE_PLATFORM,
+        PLATFORM,
         WALL,
         ENEMY
     }
     public Model(){
-        land = new ArrayList<>();
+        platforms = new ArrayList<>();
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
         player = new Player(bullets);
         walls = new ArrayList<>();
+        breakablePlatform = new ArrayList<>();
 
         loadLevel("/level.txt");
 
         ticker = new Ticker(this);
         ticker.start();
+
+        score = 0;
+
         generate();
     }
 
@@ -47,8 +54,11 @@ public class Model implements AutoCloseable{
                 int y = Integer.parseInt(args[2]);
 
                 switch (objectType){
-                    case GROUND:
-                        land.add(new Ground(x, y, Integer.parseInt(args[3]), Integer.parseInt(args[4])));
+                    case BREAKABLE_PLATFORM:
+                        breakablePlatform.add(new BreakablePlatform(x, y));
+                        break;
+                    case PLATFORM:
+                        platforms.add(new Platform(x, y, Integer.parseInt(args[3]), Integer.parseInt(args[4])));
                         break;
                     case WALL:
                         walls.add(new Wall(x, y, Integer.parseInt(args[3]), Integer.parseInt(args[4])));
@@ -83,56 +93,79 @@ public class Model implements AutoCloseable{
     }
 
     private void checkCollision() {
-        checkPlayerGroundCollision();
+        player.setOnPlatform(false);
+        checkPlayerPlatformCollision();
+        checkPlayerBreakablePlatformCollision();
         checkPlayerEnemyCollision();
         checkBulletEnemyCollision();
-        checkBulletGroundCollision();
-        checkEnemyGroundCollision();
+        checkBulletPlatformCollision();
+        checkBulletBreakablePlatformCollision();
+        checkEnemyPlatformCollision();
+        checkPlayerWallCollision();
     }
 
-    private void checkEnemyGroundCollision(){
+    private void checkEnemyPlatformCollision(){
         for (GameObject enemy : enemies) {
-            boolean onGround = false;
+            boolean onPlatform = false;
             boolean crashed = false;
-            for (GameObject ground : land) {
-                if (enemy.collidesWith(ground) &&
-                        enemy.getX() + enemy.getSpeed() > ground.getX() &&
-                        enemy.getX() + enemy.getSpeed() + enemy.getWidth() < ground.getX() + ground.getWidth() &&
-                        enemy.getY() + enemy.getHeight() >= ground.getY()) {
-                    onGround = true;
-                    for (GameObject otherGround : land) {
-                        if (ground != otherGround &&
-                                enemy.collidesWith(otherGround) &&
-                                enemy.getX() + enemy.getSpeed() < otherGround.getX() + otherGround.getWidth() &&
-                                enemy.getX() + enemy.getWidth() + enemy.getSpeed() > otherGround.getX()){
+            for (GameObject platform : platforms) {
+                if (enemy.collidesWith(platform) &&
+                        enemy.getX() + enemy.getSpeed() > platform.getX() &&
+                        enemy.getX() + enemy.getSpeed() + enemy.getWidth() < platform.getX() + platform.getWidth() &&
+                        enemy.getY() + enemy.getHeight() >= platform.getY()) {
+                    onPlatform = true;
+                    for (GameObject otherPlatform : platforms) {
+                        if (platform != otherPlatform &&
+                                enemy.collidesWith(otherPlatform) &&
+                                enemy.getX() + enemy.getSpeed() < otherPlatform.getX() + otherPlatform.getWidth() &&
+                                enemy.getX() + enemy.getWidth() + enemy.getSpeed() > otherPlatform.getX()){
                             crashed = true;
                             break;
                         }
                     }
                     break;
                 }
-
             }
 
-            if (!onGround || crashed) {
+            if (!onPlatform || crashed) {
                 enemy.setSpeed(enemy.getSpeed() * -1);
             }
         }
     }
 
-    private void checkPlayerGroundCollision() {
-        for (GameObject ground : land){
-            if (ground.collidesWith(player)) {
-                int playerY = ground.getY() - player.getHeight();
-                player.setY(playerY + 1);
-                player.setOnGround(true);
-                break;
-            } else {
-                player.setOnGround(false);
+    private void checkPlayerWallCollision(){
+        for (GameObject wall : walls){
+            if (player.collidesWith(wall)) {
+                if (player.getMovingLeft() && player.getX() < wall.getX() + wall.getWidth()) {
+                    player.setX(wall.getX() + wall.getWidth());
+                    player.setMovingLeft(false);
+                }
+                if (player.getMovingRight() && player.getX() + player.getWidth() > wall.getX()) {
+                    player.setX(wall.getX() - player.getWidth());
+                    player.setMovingRight(false);
+                }
             }
         }
     }
 
+    private void checkPlayerPlatformCollision() {
+        checkPlayerGroundCollision(platforms);
+    }
+
+    private void checkPlayerBreakablePlatformCollision() {
+        checkPlayerGroundCollision(breakablePlatform);
+    }
+
+    private void checkPlayerGroundCollision(List<GameObject> groung) {
+        for (GameObject platform : groung){
+            if (platform.collidesWith(player)) {
+                int playerY = platform.getY() - player.getHeight();
+                player.setY(playerY + 1);
+                player.setOnPlatform(true);
+                break;
+            }
+        }
+    }
 
     private void checkPlayerEnemyCollision(){
         for (GameObject enemy : enemies){
@@ -148,8 +181,9 @@ public class Model implements AutoCloseable{
         while (bulletIterator.hasNext()) {
             GameObject bullet = bulletIterator.next();
             for (GameObject enemy : enemies) {
-                if (bullet instanceof MachineGun && bullet.collidesWith(enemy)) {
+                if (bullet.collidesWith(enemy)) {
                     enemies.remove(enemy);
+                    score += 1;
                     bulletIterator.remove();
                     break;
                 }
@@ -157,8 +191,29 @@ public class Model implements AutoCloseable{
         }
     }
 
-    private void checkBulletGroundCollision(){
+    private void checkBulletPlatformCollision(){
+        for (GameObject platform : platforms){
+            for (GameObject bullet : bullets) {
+                if (bullet.collidesWith(platform)){
+                    bullets.remove(bullet);
+                    break;
+                }
+            }
+        }
+    }
 
+    private void checkBulletBreakablePlatformCollision(){
+        Iterator<GameObject> bulletIterator = bullets.iterator();
+        while (bulletIterator.hasNext()) {
+            GameObject bullet = bulletIterator.next();
+            for (GameObject platform : breakablePlatform) {
+                if (bullet.collidesWith(platform)) {
+                    breakablePlatform.remove(platform);
+                    bulletIterator.remove();
+                    break;
+                }
+            }
+        }
     }
 
     private void updateBulletGameState(){
@@ -173,6 +228,10 @@ public class Model implements AutoCloseable{
         }
     }
 
+    public int getScore(){
+        return score;
+    }
+
     public GameObject getPlayer() {
         return player;
     }
@@ -181,10 +240,12 @@ public class Model implements AutoCloseable{
         return bullets;
     }
 
-    public List<GameObject> getGround() {
-        return land;
+    public List<GameObject> getPlatforms() {
+        return platforms;
     }
-
+    public List<GameObject> getBreakablePlatform() {
+        return breakablePlatform;
+    }
     public List<GameObject> getEnemies() {
         return enemies;
     }

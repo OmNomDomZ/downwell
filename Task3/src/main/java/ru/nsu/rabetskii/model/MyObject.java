@@ -8,6 +8,8 @@ public abstract class MyObject implements GameObject {
     protected int width;
     protected int height;
     protected boolean objectOnGround;
+    protected boolean movingLeft;
+    protected boolean movingRight;
 
     public int getX() {
         return x;
@@ -33,16 +35,29 @@ public abstract class MyObject implements GameObject {
     public void setSpeed(int speed){
         this.speed = speed;
     }
-    public void setOnGround(boolean status) {
+    public void setOnPlatform(boolean status) {
         this.objectOnGround = status;
     }
 
-    public  boolean getOnGround(){
+    public  boolean getOnPlatform(){
         return objectOnGround;
     }
 
     public int getHp(){
         return hp;
+    }
+
+    public boolean getMovingLeft() {
+        return movingLeft;
+    }
+    public boolean getMovingRight() {
+        return movingRight;
+    }
+    public void setMovingLeft(boolean movingLeft) {
+        this.movingLeft = movingLeft;
+    }
+    public void setMovingRight(boolean movingRight) {
+        this.movingRight = movingRight;
     }
 
     public boolean collidesWith(GameObject object) {

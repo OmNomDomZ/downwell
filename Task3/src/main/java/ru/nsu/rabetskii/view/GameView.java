@@ -16,10 +16,9 @@ public class GameView extends JFrame implements ModelListener {
     private final JLabel playerLabel;
     private final JLabel mainLabel;
     private final JLabel hpLabel;
+    private final JLabel scoreLabel;
     private final JProgressBar bulletBar;
-    private final int mainLabelStartX = 0;
-    private int mainLabelStartY = 0;
-    private final int verticalSpeed = 4;
+    private final int verticalSpeed = 6;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     public GameView(Model model){
@@ -31,8 +30,9 @@ public class GameView extends JFrame implements ModelListener {
         playerLabel = createPlayerLabel();
         hpLabel = createHpLabel();
         bulletBar = createBulletBar();
-        createGroundLabel();
+        createPlatformLabel();
         createWallLabel();
+        scoreLabel = createScoreLabel();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(screenSize.width, screenSize.height);
@@ -43,6 +43,7 @@ public class GameView extends JFrame implements ModelListener {
         mainLabel.add(playerLabel);
         mainLabel.add(hpLabel);
         mainLabel.add(bulletBar);
+        mainLabel.add(scoreLabel);
         this.addKeyListener(controller);
         this.setVisible(true);
         this.add(mainLabel);
@@ -58,15 +59,15 @@ public class GameView extends JFrame implements ModelListener {
                 model.getPlayer().getWidth(), model.getPlayer().getHeight());
         return label;
     }
-    private void createGroundLabel(){
-        ImageIcon groundIcon = new ImageIcon(getClass().getResource("/ground.png"));
-        for (GameObject ground : model.getGround()){
-            for (int i = 0; i < ground.getWidth(); i += groundIcon.getIconWidth()){
-                JLabel groundLabel = new JLabel();
-                groundLabel.setIcon(groundIcon);
-                groundLabel.setBounds(ground.getX() + i, ground.getY(),
-                        groundIcon.getIconWidth(), ground.getHeight());
-                mainLabel.add(groundLabel);
+    private void createPlatformLabel(){
+        ImageIcon platformIcon = new ImageIcon(getClass().getResource("/platform.png"));
+        for (GameObject platform : model.getPlatforms()){
+            for (int i = 0; i < platform.getWidth(); i += platformIcon.getIconWidth()){
+                JLabel platformLabel = new JLabel();
+                platformLabel.setIcon(platformIcon);
+                platformLabel.setBounds(platform.getX() + i, platform.getY(),
+                        platformIcon.getIconWidth(), platform.getHeight());
+                mainLabel.add(platformLabel);
             }
         }
     }
@@ -111,6 +112,19 @@ public class GameView extends JFrame implements ModelListener {
         return bar;
     }
 
+    private JLabel createScoreLabel(){
+        JLabel label = new JLabel();
+        label.setFont(new Font("Arial", Font.BOLD, 24));
+        label.setForeground(Color.lightGray);
+        label.setBounds(100, 110, 200, 50);
+        label.setBorder(new LineBorder(Color.lightGray, 4));
+        label.setBackground(Color.black);
+        label.setOpaque(true);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+        return label;
+    }
+
     @Override
     public void onModelChanged() {
         SwingUtilities.invokeLater(() -> {
@@ -118,13 +132,14 @@ public class GameView extends JFrame implements ModelListener {
                     model.getPlayer().getWidth(), model.getPlayer().getHeight());
 
             // движение mainLabel
-            if (!model.getPlayer().getOnGround()) {
-                if (model.getPlayer().getY() > (screenSize.height - mainLabelStartY) / 2) {
-                    mainLabel.setBounds(mainLabelStartX, mainLabelStartY -= verticalSpeed, screenSize.width, screenSize.height * 3);
+            if (!model.getPlayer().getOnPlatform()) {
+                if (model.getPlayer().getY() > screenSize.height / 2 - mainLabel.getY()) {
+                    mainLabel.setBounds(mainLabel.getX(), mainLabel.getY() - verticalSpeed, screenSize.width, screenSize.height * 3);
                     bulletBar.setLocation(bulletBar.getX(), bulletBar.getY() + verticalSpeed);
                     hpLabel.setLocation(hpLabel.getX(), hpLabel.getY() + verticalSpeed);
+                    scoreLabel.setLocation(scoreLabel.getX(), scoreLabel.getY() + verticalSpeed);
                 } else {
-                    mainLabel.setBounds(mainLabelStartX, mainLabelStartY, screenSize.width, screenSize.height * 3);
+                    mainLabel.setBounds(mainLabel.getX(), mainLabel.getY(), screenSize.width, screenSize.height * 3);
                 }
             }
 
@@ -139,6 +154,8 @@ public class GameView extends JFrame implements ModelListener {
                 hpLabel.setBackground(new Color(0x1E0303));
             }
 
+            scoreLabel.setText("Killed: " + model.getScore());
+
             if(model.getPlayer() instanceof Player player) {
                 int maxNumBullets = player.getMaxNumBullets();
                 bulletBar.setMaximum(maxNumBullets);
@@ -146,13 +163,13 @@ public class GameView extends JFrame implements ModelListener {
                 bulletBar.setValue(curNumBullets);
             }
 
-
             // Удаление всех старых меток пуль и врагов
             Component[] components = mainLabel.getComponents();
             for (Component component : components) {
                 if (component instanceof JLabel) {
                     String name = component.getName();
-                    if (name != null && (name.equals("bullet") || name.equals("enemy"))) {
+                    if (name != null && (name.equals("bullet") || name.equals("enemy")
+                            || name.equals("breakablePlatform"))) {
                         mainLabel.remove(component);
                     }
                 }
@@ -177,7 +194,18 @@ public class GameView extends JFrame implements ModelListener {
                 enemyLabel.setBounds(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
                 mainLabel.add(enemyLabel);
             }
-                 repaint();
+
+            for (GameObject breakablePlatform : model.getBreakablePlatform()){
+                JLabel breakablePlatformLabel = new JLabel();
+                breakablePlatformLabel.setName("breakablePlatform");
+                ImageIcon breakablePlatformIcon = new ImageIcon(getClass().getResource("/breakablePlatform.png"));
+                breakablePlatformLabel.setIcon(breakablePlatformIcon);
+                breakablePlatformLabel.setBounds(breakablePlatform.getX(), breakablePlatform.getY(),
+                        breakablePlatformIcon.getIconWidth(), breakablePlatform.getHeight());
+                mainLabel.add(breakablePlatformLabel);
+            }
+
+            repaint();
         });
     }
 }

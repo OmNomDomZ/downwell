@@ -20,10 +20,10 @@ public class Controller implements KeyListener {
         if (model.getPlayer() instanceof Player player){
             switch (e.getKeyCode()){
                 case KeyEvent.VK_LEFT:
-                    player.setKeyLeftPressed(true);
+                    player.setMovingLeft(true);
                     break;
                 case KeyEvent.VK_RIGHT:
-                    player.setKeyRightPressed(true);
+                    player.setMovingRight(true);
                     break;
                 case KeyEvent.VK_SPACE:
                     player.setKeySpacePressed(true);
@@ -37,10 +37,10 @@ public class Controller implements KeyListener {
         if (model.getPlayer() instanceof Player player){
             switch (e.getKeyCode()){
                 case KeyEvent.VK_LEFT:
-                    player.setKeyLeftPressed(false);
+                    player.setMovingLeft(false);
                     break;
                 case KeyEvent.VK_RIGHT:
-                    player.setKeyRightPressed(false);
+                    player.setMovingRight(false);
                     break;
                 case KeyEvent.VK_SPACE:
                     player.setKeySpacePressed(false);
