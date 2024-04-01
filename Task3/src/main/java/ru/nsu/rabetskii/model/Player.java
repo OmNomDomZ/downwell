@@ -64,11 +64,7 @@ public class Player extends MyObject{
     @Override
     public void getDamage() {
         --hp;
-        if (hp == 0){
-            System.out.println("Game Over");
-        } else {
-            y -= 150;
-        }
+        y -= 150;
     }
 
     public void setKeySpacePressed(boolean keySpacePressed) {

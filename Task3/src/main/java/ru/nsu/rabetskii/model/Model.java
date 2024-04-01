@@ -181,6 +181,9 @@ public class Model implements AutoCloseable{
         for (GameObject enemy : enemies){
             if (player.collidesWith(enemy)){
                 player.getDamage();
+                if (player.getHp() == 0){
+                    gameOver = true;
+                }
                 break;
             }
         }

@@ -21,6 +21,7 @@ public class GameView extends JFrame implements ModelListener {
     private final JProgressBar bulletBar;
     private final int verticalSpeed = 7;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private boolean gameOver;
 
     public GameView(Model model){
         this.model = model;
@@ -35,6 +36,8 @@ public class GameView extends JFrame implements ModelListener {
         createPlatformLabel();
         createWallLabel();
         scoreLabel = createScoreLabel();
+
+        gameOver = false;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(screenSize.width, screenSize.height);
@@ -123,7 +126,7 @@ public class GameView extends JFrame implements ModelListener {
 
     private JLabel createScoreLabel(){
         JLabel label = new JLabel();
-        label.setFont(new Font("Arial", Font.BOLD, 24));
+        label.setFont(new Font("SansSerif", Font.BOLD, 24));
         label.setForeground(Color.lightGray);
         label.setBounds(100, 110, 200, 50);
         label.setBorder(new LineBorder(Color.lightGray, 4));
@@ -219,5 +222,14 @@ public class GameView extends JFrame implements ModelListener {
 
             repaint();
         });
+        if (model.getVictory() && !gameOver){
+            new ResultFrame("!YOU WIN!", new Color(0x2AB713));
+            gameOver = true;
+            this.dispose();
+        } else if(model.getGameOver() && !gameOver){
+            new ResultFrame("YOU LOSE", new Color(0x7A1010));
+            gameOver = true;
+            this.dispose();
+        }
     }
 }
