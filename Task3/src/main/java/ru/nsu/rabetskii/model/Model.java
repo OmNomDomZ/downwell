@@ -15,8 +15,11 @@ public class Model implements AutoCloseable{
     private final List<GameObject> platforms;
     private final List<GameObject> walls;
     private final List<GameObject> breakablePlatform;
+    private final GameObject finish;
     private ModelListener listener;
     private final Thread ticker;
+    private boolean gameOver;
+    private boolean victory;
     private int score;
     private enum GameObjectType {
         BREAKABLE_PLATFORM,
@@ -31,15 +34,15 @@ public class Model implements AutoCloseable{
         player = new Player(bullets);
         walls = new ArrayList<>();
         breakablePlatform = new ArrayList<>();
+        finish = new Finish();
 
         loadLevel("/level.txt");
 
+        score = 0;
+        gameOver = false;
+
         ticker = new Ticker(this);
         ticker.start();
-
-        score = 0;
-
-        generate();
     }
 
     private void loadLevel(String filename){
@@ -102,6 +105,7 @@ public class Model implements AutoCloseable{
         checkBulletBreakablePlatformCollision();
         checkEnemyPlatformCollision();
         checkPlayerWallCollision();
+        checkPlayerFinishCollision();
     }
 
     private void checkEnemyPlatformCollision(){
@@ -133,6 +137,12 @@ public class Model implements AutoCloseable{
         }
     }
 
+    private void checkPlayerFinishCollision(){
+        if (player.collidesWith(finish) && !victory){
+            victory = true;
+        }
+    }
+
     private void checkPlayerWallCollision(){
         for (GameObject wall : walls){
             if (player.collidesWith(wall)) {
@@ -156,8 +166,8 @@ public class Model implements AutoCloseable{
         checkPlayerGroundCollision(breakablePlatform);
     }
 
-    private void checkPlayerGroundCollision(List<GameObject> groung) {
-        for (GameObject platform : groung){
+    private void checkPlayerGroundCollision(List<GameObject> ground) {
+        for (GameObject platform : ground){
             if (platform.collidesWith(player)) {
                 int playerY = platform.getY() - player.getHeight();
                 player.setY(playerY + 1);
@@ -235,6 +245,9 @@ public class Model implements AutoCloseable{
     public GameObject getPlayer() {
         return player;
     }
+    public GameObject getFinish(){
+        return finish;
+    }
 
     public List<GameObject> getBullet() {
         return bullets;
@@ -250,6 +263,12 @@ public class Model implements AutoCloseable{
         return enemies;
     }
     public List<GameObject> getWalls() {return walls;}
+    public boolean getVictory(){
+        return victory;
+    }
+    public boolean getGameOver(){
+        return gameOver;
+    }
 
     public void setListener(ModelListener listener) {
         this.listener = listener;
