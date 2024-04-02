@@ -10,6 +10,8 @@ public interface GameObject {
     boolean collidesWith(GameObject object);
     int getWidth();
     int getHeight();
+    void setWidth(int width);
+    void setHeight(int height);
     void setOnPlatform(boolean status);
     boolean getOnPlatform();
     int getSpeed();

@@ -51,10 +51,8 @@ public class ResultFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == button){
-            Model model = new Model();
             SwingUtilities.invokeLater(() -> {
-                GameView mainWindow = new GameView(model);
-                mainWindow.setVisible(true);
+                new StartMenu();
             });
         }
     }

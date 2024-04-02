@@ -21,17 +21,22 @@ public class Model implements AutoCloseable{
     private boolean gameOver;
     private boolean victory;
     private int score;
+    private final String weapon;
     private enum GameObjectType {
         BREAKABLE_PLATFORM,
         PLATFORM,
         WALL,
         ENEMY
     }
-    public Model(){
+    private enum Weapon {
+        MACHINE_GUN,
+        LASER,
+    }
+    public Model(String weapon){
         platforms = new ArrayList<>();
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
-        player = new Player(bullets);
+        player = new Player(bullets, weapon);
         walls = new ArrayList<>();
         breakablePlatform = new ArrayList<>();
         finish = new Finish();
@@ -40,6 +45,7 @@ public class Model implements AutoCloseable{
 
         score = 0;
         gameOver = false;
+        this.weapon = weapon;
 
         ticker = new Ticker(this);
         ticker.start();
@@ -195,9 +201,17 @@ public class Model implements AutoCloseable{
             GameObject bullet = bulletIterator.next();
             for (GameObject enemy : enemies) {
                 if (bullet.collidesWith(enemy)) {
-                    enemies.remove(enemy);
-                    score += 1;
-                    bulletIterator.remove();
+                    switch (Weapon.valueOf(weapon)){
+                        case MACHINE_GUN:
+                            enemies.remove(enemy);
+                            score += 1;
+                            bulletIterator.remove();
+                            break;
+                        case LASER:
+                            enemies.remove(enemy);
+                            score += 1;
+                            break;
+                    }
                     break;
                 }
             }
@@ -208,7 +222,13 @@ public class Model implements AutoCloseable{
         for (GameObject platform : platforms){
             for (GameObject bullet : bullets) {
                 if (bullet.collidesWith(platform)){
-                    bullets.remove(bullet);
+                    switch (Weapon.valueOf(weapon)){
+                        case MACHINE_GUN:
+                            bullets.remove(bullet);
+                            break;
+                        case LASER:
+                            break;
+                    }
                     break;
                 }
             }
@@ -221,8 +241,15 @@ public class Model implements AutoCloseable{
             GameObject bullet = bulletIterator.next();
             for (GameObject platform : breakablePlatform) {
                 if (bullet.collidesWith(platform)) {
-                    breakablePlatform.remove(platform);
-                    bulletIterator.remove();
+                    switch (Weapon.valueOf(weapon)){
+                        case MACHINE_GUN:
+                            breakablePlatform.remove(platform);
+                            bulletIterator.remove();
+                            break;
+                        case LASER:
+                            breakablePlatform.remove(platform);
+                            break;
+                    }
                     break;
                 }
             }

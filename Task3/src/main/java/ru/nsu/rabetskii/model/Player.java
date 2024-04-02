@@ -9,9 +9,15 @@ public class Player extends MyObject{
     private double fallSpeed;
     private boolean keySpacePressed;
     private List<GameObject> bullets;
-    private final int maxNumBullets;
+    private int maxNumBullets;
     private int currentNumBullets;
-    public Player(List<GameObject> bullets){
+    private String weapon;
+    private enum Weapon {
+        MACHINE_GUN,
+        LASER,
+    }
+    public Player(List<GameObject> bullets, String weapon){
+        maxNumBullets = 0;
         x = 770;
         y = 10;
         width = 30;
@@ -21,13 +27,29 @@ public class Player extends MyObject{
         fallSpeed = 0;
         objectOnGround = false;
         this.bullets = bullets;
-        maxNumBullets = 6;
+        this.weapon = weapon;
+        switch (Weapon.valueOf(weapon)){
+            case MACHINE_GUN:
+                maxNumBullets = 6;
+                break;
+            case LASER:
+                maxNumBullets = 3;
+                break;
+        }
         currentNumBullets = maxNumBullets;
     }
 
     public void shoot(){
         if (!objectOnGround && currentNumBullets != 0) {
-            MachineGun bullet = new MachineGun(x + width / 2, y, 10);
+            GameObject bullet = null;
+            switch (Weapon.valueOf(weapon)){
+                case MACHINE_GUN:
+                    bullet = new MachineGun(x + width / 2, y, 10);
+                    break;
+                case LASER:
+                    bullet = new Laser(x + width / 2, y);
+                    break;
+            }
             bullets.add(bullet);
             currentNumBullets--;
             fallSpeed = 0;

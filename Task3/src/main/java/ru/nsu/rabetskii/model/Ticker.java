@@ -11,7 +11,7 @@ public class Ticker extends Thread{
     public void run(){
         while (!isInterrupted()){
             try {
-                Thread.sleep(30);
+                Thread.sleep(35);
                 model.generate();
             } catch (InterruptedException e) {
                 break;

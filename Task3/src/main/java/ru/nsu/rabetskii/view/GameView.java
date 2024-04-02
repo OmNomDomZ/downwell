@@ -14,7 +14,7 @@ public class GameView extends JFrame implements ModelListener {
     private Model model;
     private Controller controller;
     private final JLabel playerLabel;
-    private final JLabel finishLabel;
+    private JLabel finishLabel;
     private final JLabel mainLabel;
     private final JLabel hpLabel;
     private final JLabel scoreLabel;
@@ -28,14 +28,12 @@ public class GameView extends JFrame implements ModelListener {
         controller = new Controller(model);
 
         mainLabel = new JLabel();
-
         playerLabel = createPlayerLabel();
         hpLabel = createHpLabel();
         bulletBar = createBulletBar();
-        finishLabel = createFinishLabel();
+        scoreLabel = createScoreLabel();
         createPlatformLabel();
         createWallLabel();
-        scoreLabel = createScoreLabel();
 
         gameOver = false;
 
@@ -49,7 +47,6 @@ public class GameView extends JFrame implements ModelListener {
         mainLabel.add(hpLabel);
         mainLabel.add(bulletBar);
         mainLabel.add(scoreLabel);
-        mainLabel.add(finishLabel);
         this.addKeyListener(controller);
         this.setVisible(true);
         this.add(mainLabel);
@@ -94,14 +91,6 @@ public class GameView extends JFrame implements ModelListener {
             }
         }
     }
-    private JLabel createFinishLabel(){
-        ImageIcon finishIcon = new ImageIcon(getClass().getResource("/finish.png"));
-        JLabel label = new JLabel();
-        label.setBounds(model.getFinish().getX(), model.getFinish().getY(),
-                model.getFinish().getWidth(), model.getFinish().getWidth());
-        label.setIcon(finishIcon);
-        return label;
-    }
     private JLabel createHpLabel() {
         JLabel label = new JLabel();
         label.setFont(new Font("Arial", Font.BOLD, 30));
@@ -135,6 +124,17 @@ public class GameView extends JFrame implements ModelListener {
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setVerticalAlignment(JLabel.CENTER);
         return label;
+    }
+    private void createFinishLabel(){
+        finishLabel = new JLabel();
+        ImageIcon finishIcon = new ImageIcon(getClass().getResource("/finish.png"));
+        finishLabel.setIcon(finishIcon);
+        if((model.getFinish().getY() > -mainLabel.getY()) &&
+                (model.getFinish().getY() < -mainLabel.getY() + screenSize.height)){
+            finishLabel.setBounds(model.getFinish().getX(), model.getFinish().getY(),
+                    model.getFinish().getWidth(), model.getFinish().getWidth());
+            mainLabel.add(finishLabel);
+        }
     }
 
     @Override
@@ -195,8 +195,11 @@ public class GameView extends JFrame implements ModelListener {
                 bulletLabel.setName("bullet"); // Устанавливаем имя метки, чтобы потом можно было их идентифицировать
                 bulletLabel.setOpaque(true);
                 bulletLabel.setBackground(Color.RED);
-                bulletLabel.setBounds(bullet.getX(), bullet.getY(), bullet.getWidth(), bullet.getHeight());
-                mainLabel.add(bulletLabel);
+                if((bullet.getY() > -mainLabel.getY()) &&
+                        (bullet.getY() < -mainLabel.getY() + screenSize.height)){
+                    bulletLabel.setBounds(bullet.getX(), bullet.getY(), bullet.getWidth(), bullet.getHeight());
+                    mainLabel.add(bulletLabel);
+                }
             }
 
             // Создание новых меток врагов
@@ -205,8 +208,11 @@ public class GameView extends JFrame implements ModelListener {
                 enemyLabel.setName("enemy");
                 ImageIcon enemyIcon = new ImageIcon(getClass().getResource("/enemy.png"));
                 enemyLabel.setIcon(enemyIcon);
-                enemyLabel.setBounds(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
-                mainLabel.add(enemyLabel);
+                if((enemy.getY() > -mainLabel.getY()) &&
+                        (enemy.getY() < -mainLabel.getY() + screenSize.height)) {
+                    enemyLabel.setBounds(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+                    mainLabel.add(enemyLabel);
+                }
             }
 
             // Создание новых меток разрушаемой платформы
@@ -215,13 +221,19 @@ public class GameView extends JFrame implements ModelListener {
                 breakablePlatformLabel.setName("breakablePlatform");
                 ImageIcon breakablePlatformIcon = new ImageIcon(getClass().getResource("/breakablePlatform.png"));
                 breakablePlatformLabel.setIcon(breakablePlatformIcon);
-                breakablePlatformLabel.setBounds(breakablePlatform.getX(), breakablePlatform.getY(),
-                        breakablePlatformIcon.getIconWidth(), breakablePlatform.getHeight());
-                mainLabel.add(breakablePlatformLabel);
+                if((breakablePlatform.getY() > -mainLabel.getY()) &&
+                        (breakablePlatform.getY() < -mainLabel.getY() + screenSize.height)){
+                    breakablePlatformLabel.setBounds(breakablePlatform.getX(), breakablePlatform.getY(),
+                            breakablePlatformIcon.getIconWidth(), breakablePlatform.getHeight());
+                    mainLabel.add(breakablePlatformLabel);
+                }
             }
+
+            createFinishLabel();
 
             repaint();
         });
+
         if (model.getVictory() && !gameOver){
             new ResultFrame("!YOU WIN!", new Color(0x2AB713));
             gameOver = true;
