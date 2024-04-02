@@ -1,4 +1,4 @@
-package ru.nsu.rabetskii.model;
+package ru.nsu.rabetskii.model.GameObject;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class Player extends MyObject{
         this.weapon = weapon;
         switch (Weapon.valueOf(weapon)){
             case MACHINE_GUN:
-                maxNumBullets = 6;
+                maxNumBullets = 5;
                 break;
             case LASER:
                 maxNumBullets = 3;

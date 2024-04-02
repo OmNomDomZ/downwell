@@ -1,4 +1,4 @@
-package ru.nsu.rabetskii.model;
+package ru.nsu.rabetskii.model.GameObject;
 
 public class Enemy extends MyObject{
     public Enemy(int x, int y){

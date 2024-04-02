@@ -1,4 +1,4 @@
-package ru.nsu.rabetskii.model;
+package ru.nsu.rabetskii.model.GameObject;
 
 public class BreakablePlatform extends MyObject {
     public BreakablePlatform(int x, int y){

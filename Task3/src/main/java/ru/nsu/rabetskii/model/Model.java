@@ -1,5 +1,7 @@
 package ru.nsu.rabetskii.model;
 
+import ru.nsu.rabetskii.model.GameObject.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,16 +63,22 @@ public class Model implements AutoCloseable{
                 GameObjectType objectType = GameObjectType.valueOf(args[0]);
                 int x = Integer.parseInt(args[1]);
                 int y = Integer.parseInt(args[2]);
+                int width = 0;
+                int height = 0;
+                if (args.length == 5){
+                    width = Integer.parseInt(args[3]);
+                    height = Integer.parseInt(args[4]);
+                }
 
                 switch (objectType){
                     case BREAKABLE_PLATFORM:
                         breakablePlatform.add(new BreakablePlatform(x, y));
                         break;
                     case PLATFORM:
-                        platforms.add(new Platform(x, y, Integer.parseInt(args[3]), Integer.parseInt(args[4])));
+                        platforms.add(new Platform(x, y, width, height));
                         break;
                     case WALL:
-                        walls.add(new Wall(x, y, Integer.parseInt(args[3]), Integer.parseInt(args[4])));
+                        walls.add(new Wall(x, y, width, height));
                         break;
                     case ENEMY:
                         enemies.add(new Enemy(x, y));
@@ -98,7 +106,6 @@ public class Model implements AutoCloseable{
         checkCollision();
         updateEnemyGameState();
         updateBulletGameState();
-
     }
 
     private void checkCollision() {

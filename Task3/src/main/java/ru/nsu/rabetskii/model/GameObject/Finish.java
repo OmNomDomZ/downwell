@@ -1,7 +1,7 @@
-package ru.nsu.rabetskii.model;
+package ru.nsu.rabetskii.model.GameObject;
 
 public class Finish extends MyObject{
-    Finish(){
+    public Finish(){
         x = 425;
         y = 2267;
         width = 736;

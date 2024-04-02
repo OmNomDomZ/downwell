@@ -1,4 +1,4 @@
-package ru.nsu.rabetskii.model;
+package ru.nsu.rabetskii.model.GameObject;
 
 public class MachineGun extends MyObject{
     public MachineGun(int x, int y, int speed){

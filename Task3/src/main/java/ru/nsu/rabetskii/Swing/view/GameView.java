@@ -1,14 +1,16 @@
-package ru.nsu.rabetskii.view;
+package ru.nsu.rabetskii.Swing.view;
 
-import ru.nsu.rabetskii.controller.Controller;
-import ru.nsu.rabetskii.model.GameObject;
+import ru.nsu.rabetskii.Swing.controller.Controller;
+import ru.nsu.rabetskii.model.GameObject.GameObject;
 import ru.nsu.rabetskii.model.Model;
 import ru.nsu.rabetskii.model.ModelListener;
-import ru.nsu.rabetskii.model.Player;
+import ru.nsu.rabetskii.model.GameObject.Player;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameView extends JFrame implements ModelListener {
     private Model model;
@@ -216,7 +218,8 @@ public class GameView extends JFrame implements ModelListener {
             }
 
             // Создание новых меток разрушаемой платформы
-            for (GameObject breakablePlatform : model.getBreakablePlatform()){
+            List<GameObject> breakablePlatforms = new ArrayList<>(model.getBreakablePlatform());
+            for (GameObject breakablePlatform : breakablePlatforms) {
                 JLabel breakablePlatformLabel = new JLabel();
                 breakablePlatformLabel.setName("breakablePlatform");
                 ImageIcon breakablePlatformIcon = new ImageIcon(getClass().getResource("/breakablePlatform.png"));

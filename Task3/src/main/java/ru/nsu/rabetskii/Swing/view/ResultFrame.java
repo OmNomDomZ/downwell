@@ -1,6 +1,4 @@
-package ru.nsu.rabetskii.view;
-
-import ru.nsu.rabetskii.model.Model;
+package ru.nsu.rabetskii.Swing.view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +7,8 @@ import java.awt.event.ActionListener;
 
 public class ResultFrame extends JFrame implements ActionListener {
     JLabel label;
-    JButton button;
+    JButton playAgainButton;
+    JButton exitButton;
 
     ResultFrame(String labelText, Color labelColor){
 
@@ -20,12 +19,19 @@ public class ResultFrame extends JFrame implements ActionListener {
         label.setBackground(new Color(0x766f6f));
         label.setOpaque(true);
 
-        button = new JButton("Play again");
-        button.setFont(new Font("SansSerif", Font.BOLD, 30));
-        button.addActionListener(this);
-        button.setFocusable(false);
-        button.setBackground(new Color(0x766f6f));
-        button.setForeground(new Color(0x590808));
+        playAgainButton = new JButton("Play again");
+        playAgainButton.setFont(new Font("SansSerif", Font.BOLD, 30));
+        playAgainButton.addActionListener(this);
+        playAgainButton.setFocusable(false);
+        playAgainButton.setBackground(new Color(0x766f6f));
+        playAgainButton.setForeground(new Color(0x590808));
+
+        exitButton = new JButton("EXIT");
+        exitButton.setFont(new Font("SansSerif", Font.BOLD, 30));
+        exitButton.addActionListener(this);
+        exitButton.setFocusable(false);
+        exitButton.setForeground(new Color(0xA29898));
+        exitButton.setBackground(new Color(0x590D0D));
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
@@ -41,7 +47,10 @@ public class ResultFrame extends JFrame implements ActionListener {
         panel.add(label, gbc);
 
         gbc.gridy = 1;
-        panel.add(button, gbc);
+        panel.add(playAgainButton, gbc);
+
+        gbc.gridy = 2;
+        panel.add(exitButton, gbc);
 
         add(panel);
         setLocationRelativeTo(null);
@@ -50,10 +59,14 @@ public class ResultFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == button){
+        if (e.getSource() == playAgainButton){
             SwingUtilities.invokeLater(() -> {
                 new StartMenu();
+                dispose();
             });
+        } else if (e.getSource() == exitButton){
+            dispose();
+            System.exit(0);
         }
     }
 }

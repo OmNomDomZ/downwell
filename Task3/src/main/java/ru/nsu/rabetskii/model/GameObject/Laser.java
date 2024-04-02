@@ -1,4 +1,4 @@
-package ru.nsu.rabetskii.model;
+package ru.nsu.rabetskii.model.GameObject;
 
 public class Laser extends MyObject{
 
@@ -7,7 +7,7 @@ public class Laser extends MyObject{
         this.y = y;
         this.width = 5;
         this.height = 300;
-        hp = 3;
+        hp = 2;
     }
     @Override
     public void updateGameState() {
