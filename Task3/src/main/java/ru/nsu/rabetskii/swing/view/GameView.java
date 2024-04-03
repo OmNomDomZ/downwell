@@ -1,5 +1,6 @@
 package ru.nsu.rabetskii.swing.view;
 
+import javafx.scene.image.ImageView;
 import ru.nsu.rabetskii.swing.controller.Controller;
 import ru.nsu.rabetskii.model.gameobject.GameObject;
 import ru.nsu.rabetskii.model.Model;
@@ -80,13 +81,10 @@ public class GameView extends JFrame implements ModelListener {
         ImageIcon leftWallIcon = new ImageIcon(getClass().getResource("/leftWall.png"));
         ImageIcon rightWallIcon = new ImageIcon(getClass().getResource("/rightWall.png"));
         for (GameObject wall : model.getWalls()){
+            ImageIcon wallImage = wall.getX() < screenSize.width / 2 ? leftWallIcon : rightWallIcon;
             for (int i = 0; i < wall.getHeight(); i += leftWallIcon.getIconHeight()) {
                 JLabel wallLabel = new JLabel();
-                if (wall.getX() < screenSize.width / 2){
-                    wallLabel.setIcon(leftWallIcon);
-                } else {
-                    wallLabel.setIcon(rightWallIcon);
-                }
+                wallLabel.setIcon(wallImage);
                 wallLabel.setBounds(wall.getX(), wall.getY() + i,
                         leftWallIcon.getIconWidth(), leftWallIcon.getIconHeight());
                 mainLabel.add(wallLabel);
