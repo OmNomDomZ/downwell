@@ -1,7 +1,7 @@
-package ru.nsu.rabetskii.model.GameObject;
+package ru.nsu.rabetskii.model.gameobject;
 
-public class Enemy extends MyObject{
-    public Enemy(int x, int y){
+public class defaultEnemy extends MyObject{
+    public defaultEnemy(int x, int y){
         this.x = x;
         this.y = y;
         hp = 1;

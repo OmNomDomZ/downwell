@@ -1,7 +1,7 @@
-package ru.nsu.rabetskii.Swing.controller;
+package ru.nsu.rabetskii.swing.controller;
 
 import ru.nsu.rabetskii.model.Model;
-import ru.nsu.rabetskii.model.GameObject.Player;
+import ru.nsu.rabetskii.model.gameobject.Player;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 

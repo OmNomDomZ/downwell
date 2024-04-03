@@ -1,4 +1,4 @@
-package ru.nsu.rabetskii.model.GameObject;
+package ru.nsu.rabetskii.model.gameobject;
 
 public class Finish extends MyObject{
     public Finish(){

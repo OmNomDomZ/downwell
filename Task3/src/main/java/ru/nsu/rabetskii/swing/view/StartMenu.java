@@ -1,4 +1,4 @@
-package ru.nsu.rabetskii.Swing.view;
+package ru.nsu.rabetskii.swing.view;
 
 import ru.nsu.rabetskii.model.Model;
 

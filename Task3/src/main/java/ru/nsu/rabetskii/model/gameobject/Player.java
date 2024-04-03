@@ -1,11 +1,11 @@
-package ru.nsu.rabetskii.model.GameObject;
+package ru.nsu.rabetskii.model.gameobject;
 
 import java.util.List;
 
 public class Player extends MyObject{
     private final double GRAVITY = 0.5;
     private final double MAX_FALL_SPEED = 9.0;
-    private final int JUMP_HEIGHT = 50;
+    private final int JUMP_HEIGHT = 80;
     private double fallSpeed;
     private boolean keySpacePressed;
     private List<GameObject> bullets;

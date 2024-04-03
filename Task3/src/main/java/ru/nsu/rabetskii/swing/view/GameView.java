@@ -1,10 +1,10 @@
-package ru.nsu.rabetskii.Swing.view;
+package ru.nsu.rabetskii.swing.view;
 
-import ru.nsu.rabetskii.Swing.controller.Controller;
-import ru.nsu.rabetskii.model.GameObject.GameObject;
+import ru.nsu.rabetskii.swing.controller.Controller;
+import ru.nsu.rabetskii.model.gameobject.GameObject;
 import ru.nsu.rabetskii.model.Model;
 import ru.nsu.rabetskii.model.ModelListener;
-import ru.nsu.rabetskii.model.GameObject.Player;
+import ru.nsu.rabetskii.model.gameobject.Player;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -185,7 +185,7 @@ public class GameView extends JFrame implements ModelListener {
                 if (component instanceof JLabel) {
                     String name = component.getName();
                     if (name != null && (name.equals("bullet") || name.equals("enemy")
-                            || name.equals("breakablePlatform"))) {
+                            || name.equals("breakablePlatform") || name.equals("bat"))) {
                         mainLabel.remove(component);
                     }
                 }
@@ -205,10 +205,22 @@ public class GameView extends JFrame implements ModelListener {
             }
 
             // Создание новых меток врагов
-            for (GameObject enemy : model.getEnemies()){
+            for (GameObject enemy : model.getDefaultEnemies()){
                 JLabel enemyLabel = new JLabel();
                 enemyLabel.setName("enemy");
                 ImageIcon enemyIcon = new ImageIcon(getClass().getResource("/enemy.png"));
+                enemyLabel.setIcon(enemyIcon);
+                if((enemy.getY() > -mainLabel.getY()) &&
+                        (enemy.getY() < -mainLabel.getY() + screenSize.height)) {
+                    enemyLabel.setBounds(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+                    mainLabel.add(enemyLabel);
+                }
+            }
+
+            for (GameObject enemy : model.getBatEnemies()){
+                JLabel enemyLabel = new JLabel();
+                enemyLabel.setName("bat");
+                ImageIcon enemyIcon = new ImageIcon(getClass().getResource("/bat.png"));
                 enemyLabel.setIcon(enemyIcon);
                 if((enemy.getY() > -mainLabel.getY()) &&
                         (enemy.getY() < -mainLabel.getY() + screenSize.height)) {

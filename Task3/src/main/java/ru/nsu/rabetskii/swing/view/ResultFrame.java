@@ -1,4 +1,4 @@
-package ru.nsu.rabetskii.Swing.view;
+package ru.nsu.rabetskii.swing.view;
 
 import javax.swing.*;
 import java.awt.*;

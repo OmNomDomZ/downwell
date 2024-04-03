@@ -1,4 +1,4 @@
-package ru.nsu.rabetskii.model.GameObject;
+package ru.nsu.rabetskii.model.gameobject;
 
 public abstract class MyObject implements GameObject {
     protected int hp;

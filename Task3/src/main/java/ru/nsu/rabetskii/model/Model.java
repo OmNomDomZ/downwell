@@ -1,6 +1,6 @@
 package ru.nsu.rabetskii.model;
 
-import ru.nsu.rabetskii.model.GameObject.*;
+import ru.nsu.rabetskii.model.gameobject.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +13,8 @@ import java.util.List;
 public class Model implements AutoCloseable{
     private final GameObject player;
     private final List<GameObject> bullets;
-    private final List<GameObject> enemies;
+    private final List<GameObject> defaultEnemies;
+    private final List<GameObject> batEnemies;
     private final List<GameObject> platforms;
     private final List<GameObject> walls;
     private final List<GameObject> breakablePlatform;
@@ -28,7 +29,8 @@ public class Model implements AutoCloseable{
         BREAKABLE_PLATFORM,
         PLATFORM,
         WALL,
-        ENEMY
+        ENEMY,
+        BAT_ENEMY
     }
     private enum Weapon {
         MACHINE_GUN,
@@ -36,7 +38,8 @@ public class Model implements AutoCloseable{
     }
     public Model(String weapon){
         platforms = new ArrayList<>();
-        enemies = new ArrayList<>();
+        defaultEnemies = new ArrayList<>();
+        batEnemies = new ArrayList<>();
         bullets = new ArrayList<>();
         player = new Player(bullets, weapon);
         walls = new ArrayList<>();
@@ -81,7 +84,10 @@ public class Model implements AutoCloseable{
                         walls.add(new Wall(x, y, width, height));
                         break;
                     case ENEMY:
-                        enemies.add(new Enemy(x, y));
+                        defaultEnemies.add(new defaultEnemy(x, y));
+                        break;
+                    case BAT_ENEMY:
+                        batEnemies.add(new BatEnemy(x, y));
                         break;
                     }
             }
@@ -113,16 +119,18 @@ public class Model implements AutoCloseable{
         checkPlayerPlatformCollision();
         checkPlayerBreakablePlatformCollision();
         checkPlayerEnemyCollision();
-        checkBulletEnemyCollision();
+        checkBulletDefaultEnemyCollision();
+        checkBulletBatEnemyCollision();
         checkBulletPlatformCollision();
         checkBulletBreakablePlatformCollision();
         checkEnemyPlatformCollision();
         checkPlayerWallCollision();
         checkPlayerFinishCollision();
+        checkPlayerBatEnemyCollision();
     }
 
     private void checkEnemyPlatformCollision(){
-        for (GameObject enemy : enemies) {
+        for (GameObject enemy : defaultEnemies) {
             boolean onPlatform = false;
             boolean crashed = false;
             for (GameObject platform : platforms) {
@@ -191,7 +199,7 @@ public class Model implements AutoCloseable{
     }
 
     private void checkPlayerEnemyCollision(){
-        for (GameObject enemy : enemies){
+        for (GameObject enemy : defaultEnemies){
             if (player.collidesWith(enemy)){
                 player.getDamage();
                 if (player.getHp() == 0){
@@ -202,7 +210,36 @@ public class Model implements AutoCloseable{
         }
     }
 
-    private void checkBulletEnemyCollision(){
+    private void checkPlayerBatEnemyCollision(){
+        for (GameObject bat : batEnemies){
+            double distance = Math.sqrt(Math.pow(player.getX() - bat.getX(), 2) + Math.pow(player.getY() - bat.getY(), 2));
+            if (player.collidesWith(bat)){
+                player.getDamage();
+                if (player.getHp() == 0){
+                    gameOver = true;
+                }
+                break;
+            } else if (distance < 400) {
+                // Определить направление движения мыши к игроку
+                double deltaX = player.getX() - bat.getX();
+                double deltaY = player.getY() - bat.getY();
+                double angle = Math.atan2(deltaY, deltaX);
+                double speed = bat.getSpeed();
+                bat.setX(bat.getX() + (int)(speed * Math.cos(angle)));
+                bat.setY(bat.getY() + (int)(speed * Math.sin(angle)));
+            }
+        }
+    }
+
+    private void checkBulletDefaultEnemyCollision(){
+        checkBulletEnemyCollision(defaultEnemies);
+    }
+
+    private void checkBulletBatEnemyCollision(){
+        checkBulletEnemyCollision(batEnemies);
+    }
+
+    private void checkBulletEnemyCollision(List<GameObject> enemies){
         Iterator<GameObject> bulletIterator = bullets.iterator();
         while (bulletIterator.hasNext()) {
             GameObject bullet = bulletIterator.next();
@@ -270,7 +307,7 @@ public class Model implements AutoCloseable{
     }
 
     private void updateEnemyGameState(){
-        for (GameObject enemy : enemies){
+        for (GameObject enemy : defaultEnemies){
             enemy.updateGameState();
         }
     }
@@ -285,20 +322,23 @@ public class Model implements AutoCloseable{
     public GameObject getFinish(){
         return finish;
     }
-
     public List<GameObject> getBullet() {
         return bullets;
     }
-
     public List<GameObject> getPlatforms() {
         return platforms;
     }
     public List<GameObject> getBreakablePlatform() {
         return breakablePlatform;
     }
-    public List<GameObject> getEnemies() {
-        return enemies;
+    public List<GameObject> getDefaultEnemies() {
+        return defaultEnemies;
     }
+
+    public List<GameObject> getBatEnemies() {
+        return batEnemies;
+    }
+
     public List<GameObject> getWalls() {return walls;}
     public boolean getVictory(){
         return victory;
