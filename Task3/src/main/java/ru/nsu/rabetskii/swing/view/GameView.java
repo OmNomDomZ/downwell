@@ -1,6 +1,5 @@
 package ru.nsu.rabetskii.swing.view;
 
-import javafx.scene.image.ImageView;
 import ru.nsu.rabetskii.swing.controller.Controller;
 import ru.nsu.rabetskii.model.gameobject.GameObject;
 import ru.nsu.rabetskii.model.Model;
@@ -195,11 +194,11 @@ public class GameView extends JFrame implements ModelListener {
                 bulletLabel.setName("bullet"); // Устанавливаем имя метки, чтобы потом можно было их идентифицировать
                 bulletLabel.setOpaque(true);
                 bulletLabel.setBackground(Color.RED);
-                if((bullet.getY() > -mainLabel.getY()) &&
-                        (bullet.getY() < -mainLabel.getY() + screenSize.height)){
+//                if((bullet.getY() > -mainLabel.getY()) &&
+//                        (bullet.getY() < -mainLabel.getY() + screenSize.height)){
                     bulletLabel.setBounds(bullet.getX(), bullet.getY(), bullet.getWidth(), bullet.getHeight());
                     mainLabel.add(bulletLabel);
-                }
+//                }
             }
 
             // Создание новых меток врагов

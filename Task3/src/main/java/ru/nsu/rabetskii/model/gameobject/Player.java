@@ -1,5 +1,8 @@
 package ru.nsu.rabetskii.model.gameobject;
 
+import ru.nsu.rabetskii.model.Model;
+
+import java.awt.*;
 import java.util.List;
 
 public class Player extends MyObject{
@@ -12,11 +15,13 @@ public class Player extends MyObject{
     private int maxNumBullets;
     private int currentNumBullets;
     private String weapon;
+    private Model model;
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private enum Weapon {
         MACHINE_GUN,
         LASER,
     }
-    public Player(List<GameObject> bullets, String weapon){
+    public Player(List<GameObject> bullets, String weapon, Model model){
         maxNumBullets = 0;
         x = 770;
         y = 10;
@@ -37,6 +42,7 @@ public class Player extends MyObject{
                 break;
         }
         currentNumBullets = maxNumBullets;
+        this.model = model;
     }
 
     public void shoot(){
@@ -44,10 +50,10 @@ public class Player extends MyObject{
             GameObject bullet = null;
             switch (Weapon.valueOf(weapon)){
                 case MACHINE_GUN:
-                    bullet = new MachineGun(x + width / 2, y, 10);
+                    bullet = new MachineGun(x + width / 2, y, model);
                     break;
                 case LASER:
-                    bullet = new Laser(x + width / 2, y);
+                    bullet = new Laser(x + width / 2, y, screenSize.height * 3 - x + width, model);
                     break;
             }
             bullets.add(bullet);

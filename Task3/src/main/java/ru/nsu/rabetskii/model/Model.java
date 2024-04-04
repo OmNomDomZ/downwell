@@ -41,7 +41,7 @@ public class Model implements AutoCloseable{
         defaultEnemies = new ArrayList<>();
         batEnemies = new ArrayList<>();
         bullets = new ArrayList<>();
-        player = new Player(bullets, weapon);
+        player = new Player(bullets, weapon, this);
         walls = new ArrayList<>();
         breakablePlatform = new ArrayList<>();
         finish = new Finish();
@@ -119,10 +119,10 @@ public class Model implements AutoCloseable{
         checkPlayerPlatformCollision();
         checkPlayerBreakablePlatformCollision();
         checkPlayerEnemyCollision();
-        checkBulletDefaultEnemyCollision();
-        checkBulletBatEnemyCollision();
-        checkBulletPlatformCollision();
-        checkBulletBreakablePlatformCollision();
+//        checkBulletDefaultEnemyCollision();
+//        checkBulletBatEnemyCollision();
+//        checkBulletPlatformCollision();
+//        checkBulletBreakablePlatformCollision();
         checkEnemyPlatformCollision();
         checkPlayerWallCollision();
         checkPlayerFinishCollision();
