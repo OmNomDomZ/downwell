@@ -1,5 +1,6 @@
 package ru.nsu.rabetskii.javafx.view;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -20,24 +21,25 @@ public class ResultView extends Stage {
         label.setText(labelText);
         label.setTextFill(labelColor);
 
+        setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
         Button playAgainButton = new Button("Play again");
         playAgainButton.setFont(Font.font("SansSerif", FontWeight.BOLD, 30));
-        playAgainButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        playAgainButton.setOnAction(event -> {
+            Platform.runLater(() -> {
                 new StartMenu();
                 close();
-            }
+            });
         });
 
         Button exitButton = new Button("EXIT");
         exitButton.setFont(Font.font("SansSerif", FontWeight.BOLD, 30));
-        exitButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                close();
-                System.exit(0);
-            }
+        exitButton.setOnAction(event -> {
+            close();
+            System.exit(0);
         });
 
         GridPane gridPane = new GridPane();

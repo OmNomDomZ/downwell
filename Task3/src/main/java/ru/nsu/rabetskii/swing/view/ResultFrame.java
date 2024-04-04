@@ -60,9 +60,9 @@ public class ResultFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == playAgainButton){
+            this.dispose();
             SwingUtilities.invokeLater(() -> {
-                new StartMenu();
-                dispose();
+                StartMenu startMenu = new StartMenu();
             });
         } else if (e.getSource() == exitButton){
             dispose();

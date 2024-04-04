@@ -248,13 +248,17 @@ public class GameView extends JFrame implements ModelListener {
         });
 
         if (model.getVictory() && !gameOver){
-            new ResultFrame("!YOU WIN!", new Color(0x2AB713));
             gameOver = true;
-            this.dispose();
+            SwingUtilities.invokeLater(() -> {
+                new ResultFrame("!YOU WIN!", new Color(0x2AB713));
+                this.dispose();
+            });
         } else if(model.getGameOver() && !gameOver){
-            new ResultFrame("YOU LOSE", new Color(0x7A1010));
             gameOver = true;
-            this.dispose();
+            SwingUtilities.invokeLater(() -> {
+                new ResultFrame("YOU LOSE", new Color(0x7A1010));
+                this.dispose();
+            });
         }
     }
 }

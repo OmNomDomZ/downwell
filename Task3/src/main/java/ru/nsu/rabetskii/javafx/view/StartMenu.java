@@ -1,5 +1,6 @@
 package ru.nsu.rabetskii.javafx.view;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,6 +28,11 @@ public class StartMenu extends Stage {
         label.setTextFill(Color.rgb(90, 13, 13));
         label.setStyle("-fx-background-color: #766f6f;");
         label.setPadding(new Insets(10));
+
+        setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
 
         startButton = new Button("Play");
         machineGunButton = new Button("Machine Gun");
@@ -68,9 +74,11 @@ public class StartMenu extends Stage {
                 new Alert(Alert.AlertType.ERROR, "Please select a weapon.", ButtonType.OK).showAndWait();
             } else {
                 Model model = new Model(weapon);
-                GameView gameView = new GameView(model);
-                gameView.show();
-                close();
+                Platform.runLater(() -> {
+                    GameView gameView = new GameView(model);
+                    gameView.show();
+                    close();
+                });
             }
         } else if (buttonType.equals("machineGun")) {
             weapon = "MACHINE_GUN";
